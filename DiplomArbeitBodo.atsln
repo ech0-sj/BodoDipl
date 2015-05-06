@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "DiplomArbeitBodo", "DiplomArbeitBodo\DiplomArbeitBodo.cproj", "{5DE3B36B-C1F8-4D40-8786-E94E69AE2386}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "SPI_EXAMPLE1", "SPI_EXAMPLE1\SPI_EXAMPLE1.cproj", "{EF1332E9-EBED-432F-8E6E-DE107A9F86E0}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Test_ForeignProject", "Test_ForeignProject\Test_ForeignProject.cproj", "{A70EE671-9F30-4279-896B-0851A117A42F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Release|ARM = Release|ARM
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5DE3B36B-C1F8-4D40-8786-E94E69AE2386}.Debug|ARM.ActiveCfg = Debug|ARM
+		{5DE3B36B-C1F8-4D40-8786-E94E69AE2386}.Debug|ARM.Build.0 = Debug|ARM
+		{5DE3B36B-C1F8-4D40-8786-E94E69AE2386}.Release|ARM.ActiveCfg = Release|ARM
+		{5DE3B36B-C1F8-4D40-8786-E94E69AE2386}.Release|ARM.Build.0 = Release|ARM
+		{EF1332E9-EBED-432F-8E6E-DE107A9F86E0}.Debug|ARM.ActiveCfg = Debug|ARM
+		{EF1332E9-EBED-432F-8E6E-DE107A9F86E0}.Debug|ARM.Build.0 = Debug|ARM
+		{EF1332E9-EBED-432F-8E6E-DE107A9F86E0}.Release|ARM.ActiveCfg = Release|ARM
+		{EF1332E9-EBED-432F-8E6E-DE107A9F86E0}.Release|ARM.Build.0 = Release|ARM
+		{A70EE671-9F30-4279-896B-0851A117A42F}.Debug|ARM.ActiveCfg = Debug|ARM
+		{A70EE671-9F30-4279-896B-0851A117A42F}.Debug|ARM.Build.0 = Debug|ARM
+		{A70EE671-9F30-4279-896B-0851A117A42F}.Release|ARM.ActiveCfg = Release|ARM
+		{A70EE671-9F30-4279-896B-0851A117A42F}.Release|ARM.Build.0 = Release|ARM
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

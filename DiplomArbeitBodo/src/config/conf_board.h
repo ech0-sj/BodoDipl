@@ -49,55 +49,25 @@
 
 /* Configure UART pins */
 #define CONF_BOARD_UART_CONSOLE
-#define CONF_BOARD_COM_PORT
+/* USART0 module is used in serial mode. */
 #define CONF_BOARD_USART_RXD
 #define CONF_BOARD_USART_TXD
 
+/** Usart Hw ID used by the console (UART). */
+#define CONSOLE_UART_ID          ID_UART
 
-/* Enable USB interface (USB) for host mode */
-#define CONF_BOARD_USB_PORT
-
-/* Configure ADC example pins */
-//#define CONF_BOARD_ADC
-
-/* Configure PWM LED0 pin */
-//#define CONF_BOARD_PWM_LED0
-
-/* Configure PWM LED1 pin */
-//#define CONF_BOARD_PWM_LED1
-
-/* Configure PWM LED2 pin */
-//#define CONF_BOARD_PWM_LED2
-
-/* Configure SPI0 pins */
+/** SPI0 MACRO definition */
 #define CONF_BOARD_SPI0
+
+/** SPI0 slave select0 MACRO definition */
 #define CONF_BOARD_SPI0_NPCS0
+
 /** Spi Hw ID . */
 #define SPI_ID          ID_SPI0
 
-//#define CONF_BOARD_SPI0_NPCS1
-//#define CONF_BOARD_SPI0_NPCS2
-//#define CONF_BOARD_SPI0_NPCS3
-
-/* Configure SPI1 pins */
-//#define CONF_BOARD_SPI1
-//#define CONF_BOARD_SPI1_NPCS0
-//#define CONF_BOARD_SPI1_NPCS1
-//#define CONF_BOARD_SPI1_NPCS2
-//#define CONF_BOARD_SPI1_NPCS3
-
-//#define CONF_BOARD_TWI0
-
-//#define CONF_BOARD_TWI1
-
-
-/* Configure USART CTS pin */
-//#define CONF_BOARD_USART_CTS
-
-/* Configure USART RTS pin */
-//#define CONF_BOARD_USART_RTS
-
-/* Configure USART synchronous communication SCK pin */
-//#define CONF_BOARD_USART_SCK
+/** SPI base address for SPI master mode*/
+#define SPI_MASTER_BASE      SPI0
+/** SPI base address for SPI slave mode, (on different board) */
+#define SPI_SLAVE_BASE       SPI0
 
 #endif // CONF_BOARD_H

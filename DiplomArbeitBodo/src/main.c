@@ -108,20 +108,18 @@ int main (void)
 	SysTick_Config(sysclk_get_cpu_hz() / 1000);
 	
 	led_config();
-	//SPIMaster_Init( SPICLK_1MHz );
-	
+	SPIMaster_Init( SPICLK_1MHz );
 	
 	USARTWifi_Init( 9600 );
-	USARTWifi_Clear();
-	
+		
 	while( 1 )
 	{
 		SwitchOnLED0();
 		Delay_ms( 1000 );
 		
-		gDEBUGVAR = gDEBUGVAR;
 		usart_putchar( WIFI_USART, 'a');
-		//usart_write( WIFI_USART, 0x101010 ); 
+		SetupNetSetting( &gWIZNETINFO ); 
+		W5500_Init( &gWIZNETINFO ); 
 		
 		SwitchOffLED0();
 		Delay_ms( 1000 );

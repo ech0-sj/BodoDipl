@@ -22,9 +22,19 @@
 
 #define ALL_INTERRUPT_MASK  0xffffffff
 
+
+#define USART_RECV_LEN		4096	/* 4k byte groﬂ */ 
+typedef struct  
+{
+	uint8_t buffer[USART_RECV_LEN];
+	uint32_t filled; 
+	uint32_t position; 
+	uint32_t size; 
+}UsartReceiveBuffer;
+
 // always 8n1 by default ;) 
 void USARTWifi_Init( uint32_t baudrate ); 
-
 void USARTWifi_Clear( void ); 
+void USARTWifi_Write( uint8_t* buffer, uint32_t bufLen );
 
 #endif /* MYUSART_H_ */

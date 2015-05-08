@@ -10,6 +10,11 @@
 
 uint32_t gDEBUGVAR = 0; 
 
+UsartReceiveBuffer gWifiRecvBuffer = {
+	.filled = 0,
+	.position = 0,
+	.size = USART_RECV_LEN, 
+};
 
 void USARTWifi_Init( uint32_t baudrate )
 {
@@ -44,6 +49,20 @@ void USARTWifi_Clear( void )
 	usart_enable_rx(WIFI_USART);
 }
 
+void USARTWifi_Write( uint8_t* buffer, uint32_t bufLen )
+{
+	uint32_t actChar; 
+	uint32_t i; 
+	
+	for( i = 0; i < bufLen; i++ )
+	{
+		actChar = buffer[i]; 
+		usart_write( WIFI_USART, actChar ); 
+	}
+	
+}
+
+
 void WIFI_USART_IRQHANDLER( void )
 {
 	// kam er an 
@@ -53,11 +72,11 @@ void WIFI_USART_IRQHANDLER( void )
 	if (ul_status & US_CSR_RXRDY) 
 	{
 		usart_getchar(WIFI_USART, (uint32_t *)&readChar);
-		gDEBUGVAR = 1; 
-		// usart_write(WIFI_USART, readChar);
+		gWifiRecvBuffer.buffer[gWifiRecvBuffer.filled] = readChar & (0x000000FF);
+		gWifiRecvBuffer.filled += 1; 
+		
 	}
 	if( ul_status & US_CSR_TXRDY )
 	{
-		gDEBUGVAR = 10; 
 	}
 }

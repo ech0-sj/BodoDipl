@@ -31,6 +31,7 @@
 #include <asf.h>
 #include "Systimer/Systimer.h"
 #include "SPI/mySPI.h"
+#include "Usart/myUsart.h"
 #include "Wiznet/wizchip_conf.h"
 
 
@@ -96,6 +97,7 @@ wiz_NetInfo gWIZNETINFO = {
 	.dns = {0, 0, 0, 0},
 .dhcp = NETINFO_STATIC };
 
+extern uint32_t gDEBUGVAR;
 
 int main (void)
 {
@@ -106,21 +108,23 @@ int main (void)
 	SysTick_Config(sysclk_get_cpu_hz() / 1000);
 	
 	led_config();
-	SPIMaster_Init( SPICLK_1MHz );
+	//SPIMaster_Init( SPICLK_1MHz );
 	
-	/* Insert application code here, after the board has been initialized. */
+	
+	USARTWifi_Init( 9600 );
+	USARTWifi_Clear();
 	
 	while( 1 )
 	{
 		SwitchOnLED0();
 		Delay_ms( 1000 );
 		
-
-		SetupNetSetting( &gWIZNETINFO ); 
-		W5500_Init( &gWIZNETINFO ); 
+		gDEBUGVAR = gDEBUGVAR;
+		usart_putchar( WIFI_USART, 'a');
+		//usart_write( WIFI_USART, 0x101010 ); 
 		
 		SwitchOffLED0();
-		Delay_ms( 1000 ); 
+		Delay_ms( 1000 );
 	}
 }
 

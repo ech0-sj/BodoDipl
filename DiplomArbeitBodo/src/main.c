@@ -104,13 +104,6 @@ int main (void)
 	board_init();
 	ioport_init();
 	SysTick_Config(sysclk_get_cpu_hz() / 1000);
-
-	// Pins belegen ( ist das nötig? ) 
-	gpio_configure_pin( PIO_PA25_IDX, PIO_PERIPH_A | PIO_DEFAULT );
-	gpio_configure_pin( PIO_PA26_IDX, PIO_PERIPH_A | PIO_DEFAULT );
-	gpio_configure_pin( PIO_PA27_IDX, PIO_PERIPH_A | PIO_DEFAULT );
-	gpio_configure_pin( PIO_PA28_IDX, PIO_PERIPH_A | PIO_DEFAULT );
-	
 	
 	led_config();
 	SPIMaster_Init( SPICLK_1MHz );
@@ -122,10 +115,10 @@ int main (void)
 		SwitchOnLED0();
 		Delay_ms( 1000 );
 		
-		//Test_SPI();
-		SetupNetSetting( &gWIZNETINFO );
-		W5500_Init( &gWIZNETINFO ); 	
-	
+
+		SetupNetSetting( &gWIZNETINFO ); 
+		W5500_Init( &gWIZNETINFO ); 
+		
 		SwitchOffLED0();
 		Delay_ms( 1000 ); 
 	}

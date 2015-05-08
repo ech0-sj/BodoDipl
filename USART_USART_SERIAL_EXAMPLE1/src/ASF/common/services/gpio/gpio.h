@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief Board configuration.
+ * \brief Common GPIO API.
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2010-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -43,63 +43,44 @@
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
+#ifndef _GPIO_H_
+#define _GPIO_H_
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#include <parts.h>
 
-/* Configure UART pins */
-#define CONF_BOARD_UART_CONSOLE
+#if (SAM3S || SAM3U || SAM3N || SAM3XA || SAM4S || SAM4E || SAM4N || SAM4C || SAMG || SAM4CP || SAM4CM)
+# include "sam_gpio/sam_gpio.h"
+#elif XMEGA
+# include "xmega_gpio/xmega_gpio.h"
+#elif MEGA || MEGA_RF
+# include "mega_gpio/mega_gpio.h"
+#else
+# error Unsupported chip type
+#endif
 
+/**
+ * \defgroup gpio_group General Purpose Input/Output
+ *
+ * This is the common API for GPIO. Additional features are available
+ * in the documentation of the specific modules.
+ *
+ * \section io_group_platform Platform Dependencies
+ *
+ * The following functions are available on all platforms, but there may
+ * be variations in the function signature (i.e. parameters) and
+ * behaviour. These functions are typically called by platform-specific
+ * parts of drivers, and applications that aren't intended to be
+ * portable:
+ *   - gpio_pin_is_low()
+ *   - gpio_pin_is_high()
+ *   - gpio_set_pin_high()
+ *   - gpio_set_pin_group_high()
+ *   - gpio_set_pin_low()
+ *   - gpio_set_pin_group_low()
+ *   - gpio_toggle_pin()
+ *   - gpio_toggle_pin_group()
+ *   - gpio_configure_pin()
+ *   - gpio_configure_group()
+ */
 
-/* Enable USB interface (USB) for host mode */
-#define CONF_BOARD_USB_PORT
-
-/* Configure ADC example pins */
-//#define CONF_BOARD_ADC
-
-/* Configure PWM LED0 pin */
-//#define CONF_BOARD_PWM_LED0
-
-/* Configure PWM LED1 pin */
-//#define CONF_BOARD_PWM_LED1
-
-/* Configure PWM LED2 pin */
-//#define CONF_BOARD_PWM_LED2
-
-/* Configure SPI0 pins */
-#define CONF_BOARD_SPI0
-#define CONF_BOARD_SPI0_NPCS0
-/** Spi Hw ID . */
-#define SPI_ID          ID_SPI0
-
-//#define CONF_BOARD_SPI0_NPCS1
-//#define CONF_BOARD_SPI0_NPCS2
-//#define CONF_BOARD_SPI0_NPCS3
-
-/* Configure SPI1 pins */
-//#define CONF_BOARD_SPI1
-//#define CONF_BOARD_SPI1_NPCS0
-//#define CONF_BOARD_SPI1_NPCS1
-//#define CONF_BOARD_SPI1_NPCS2
-//#define CONF_BOARD_SPI1_NPCS3
-
-//#define CONF_BOARD_TWI0
-
-//#define CONF_BOARD_TWI1
-
-/* Configure USART RXD pin */
-//#define CONF_BOARD_USART_RXD
-
-/* Configure USART TXD pin */
-//#define CONF_BOARD_USART_TXD
-
-/* Configure USART CTS pin */
-//#define CONF_BOARD_USART_CTS
-
-/* Configure USART RTS pin */
-//#define CONF_BOARD_USART_RTS
-
-/* Configure USART synchronous communication SCK pin */
-//#define CONF_BOARD_USART_SCK
-
-#endif // CONF_BOARD_H
+#endif  /* _GPIO_H_ */

@@ -1,7 +1,8 @@
 /**
  * \file
  *
- * \brief Board configuration.
+ * \brief Provides the low-level initialization functions that called 
+ * on chip startup.
  *
  * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
  *
@@ -44,62 +45,45 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#ifndef SYSTEM_SAM3X_H_INCLUDED
+#define SYSTEM_SAM3X_H_INCLUDED
 
-/* Configure UART pins */
-#define CONF_BOARD_UART_CONSOLE
+/* @cond 0 */
+/**INDENT-OFF**/
+#ifdef __cplusplus
+extern "C" {
+#endif
+/**INDENT-ON**/
+/* @endcond */
 
+#include <stdint.h>
+#include <compiler.h>
 
-/* Enable USB interface (USB) for host mode */
-#define CONF_BOARD_USB_PORT
+extern uint32_t SystemCoreClock;	/* System Clock Frequency (Core Clock) */
 
-/* Configure ADC example pins */
-//#define CONF_BOARD_ADC
+/**
+ * @brief Setup the microcontroller system.
+ * Initialize the System and update the SystemCoreClock variable.
+ */
+void SystemInit(void);
 
-/* Configure PWM LED0 pin */
-//#define CONF_BOARD_PWM_LED0
+/**
+ * @brief Updates the SystemCoreClock with current core Clock 
+ * retrieved from cpu registers.
+ */
+void SystemCoreClockUpdate(void);
 
-/* Configure PWM LED1 pin */
-//#define CONF_BOARD_PWM_LED1
+/** 
+ * Initialize flash.
+ */
+void system_init_flash(uint32_t ul_clk);
 
-/* Configure PWM LED2 pin */
-//#define CONF_BOARD_PWM_LED2
+/* @cond 0 */
+/**INDENT-OFF**/
+#ifdef __cplusplus
+}
+#endif
+/**INDENT-ON**/
+/* @endcond */
 
-/* Configure SPI0 pins */
-#define CONF_BOARD_SPI0
-#define CONF_BOARD_SPI0_NPCS0
-/** Spi Hw ID . */
-#define SPI_ID          ID_SPI0
-
-//#define CONF_BOARD_SPI0_NPCS1
-//#define CONF_BOARD_SPI0_NPCS2
-//#define CONF_BOARD_SPI0_NPCS3
-
-/* Configure SPI1 pins */
-//#define CONF_BOARD_SPI1
-//#define CONF_BOARD_SPI1_NPCS0
-//#define CONF_BOARD_SPI1_NPCS1
-//#define CONF_BOARD_SPI1_NPCS2
-//#define CONF_BOARD_SPI1_NPCS3
-
-//#define CONF_BOARD_TWI0
-
-//#define CONF_BOARD_TWI1
-
-/* Configure USART RXD pin */
-//#define CONF_BOARD_USART_RXD
-
-/* Configure USART TXD pin */
-//#define CONF_BOARD_USART_TXD
-
-/* Configure USART CTS pin */
-//#define CONF_BOARD_USART_CTS
-
-/* Configure USART RTS pin */
-//#define CONF_BOARD_USART_RTS
-
-/* Configure USART synchronous communication SCK pin */
-//#define CONF_BOARD_USART_SCK
-
-#endif // CONF_BOARD_H
+#endif /* SYSTEM_SAM3X_H_INCLUDED */

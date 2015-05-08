@@ -1,7 +1,9 @@
 /**
  * \file
  *
- * \brief Board configuration.
+ * \brief Arch file for SAM.
+ *
+ * This file defines common SAM series.
  *
  * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
  *
@@ -44,62 +46,92 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#ifndef _SAM_IO_
+#define _SAM_IO_
 
-/* Configure UART pins */
-#define CONF_BOARD_UART_CONSOLE
+/* SAM3 family */
 
+/* SAM3S series */
+#if (SAM3S)
+# if (SAM3S8 || SAM3SD8)
+#  include "sam3s8.h"
+# else
+#  include "sam3s.h"
+# endif
+#endif
 
-/* Enable USB interface (USB) for host mode */
-#define CONF_BOARD_USB_PORT
+/* SAM3U series */
+#if (SAM3U)
+#  include "sam3u.h"
+#endif
 
-/* Configure ADC example pins */
-//#define CONF_BOARD_ADC
+/* SAM3N series */
+#if (SAM3N)
+#  include "sam3n.h"
+#endif
 
-/* Configure PWM LED0 pin */
-//#define CONF_BOARD_PWM_LED0
+/* SAM3XA series */
+#if (SAM3XA)
+#  include "sam3xa.h"
+#endif
 
-/* Configure PWM LED1 pin */
-//#define CONF_BOARD_PWM_LED1
+/* SAM4S series */
+#if (SAM4S)
+#  include "sam4s.h"
+#endif
 
-/* Configure PWM LED2 pin */
-//#define CONF_BOARD_PWM_LED2
+/* SAM4L series */
+#if (SAM4L)
+#  include "sam4l.h"
+#endif
 
-/* Configure SPI0 pins */
-#define CONF_BOARD_SPI0
-#define CONF_BOARD_SPI0_NPCS0
-/** Spi Hw ID . */
-#define SPI_ID          ID_SPI0
+/* SAM4E series */
+#if (SAM4E)
+#  include "sam4e.h"
+#endif
 
-//#define CONF_BOARD_SPI0_NPCS1
-//#define CONF_BOARD_SPI0_NPCS2
-//#define CONF_BOARD_SPI0_NPCS3
+/* SAM4N series */
+#if (SAM4N)
+#  include "sam4n.h"
+#endif
 
-/* Configure SPI1 pins */
-//#define CONF_BOARD_SPI1
-//#define CONF_BOARD_SPI1_NPCS0
-//#define CONF_BOARD_SPI1_NPCS1
-//#define CONF_BOARD_SPI1_NPCS2
-//#define CONF_BOARD_SPI1_NPCS3
+/* SAM4C series */
+#if (SAM4C)
+#  include "sam4c.h"
+#endif
 
-//#define CONF_BOARD_TWI0
+/* SAM4CM series */
+#if (SAM4CM)
+#  if (SAM4CMP32 || SAM4CMS32)
+#    include "sam4cm32.h"
+#  else
+#    include "sam4cm.h"
+#  endif
+#endif
 
-//#define CONF_BOARD_TWI1
+/* SAM4CP series */
+#if (SAM4CP)
+#  include "sam4cp.h"
+#endif
 
-/* Configure USART RXD pin */
-//#define CONF_BOARD_USART_RXD
+/* SAMG51 series */
+#if (SAMG51)
+#  include "samg51.h"
+#endif
 
-/* Configure USART TXD pin */
-//#define CONF_BOARD_USART_TXD
+/* SAMG53 series */
+#if (SAMG53)
+#  include "samg53.h"
+#endif
 
-/* Configure USART CTS pin */
-//#define CONF_BOARD_USART_CTS
+/* SAMG54 series */
+#if (SAMG54)
+#  include "samg54.h"
+#endif
 
-/* Configure USART RTS pin */
-//#define CONF_BOARD_USART_RTS
+/* SAMG55 series */
+#if (SAMG55)
+#  include "samg55.h"
+#endif
 
-/* Configure USART synchronous communication SCK pin */
-//#define CONF_BOARD_USART_SCK
-
-#endif // CONF_BOARD_H
+#endif /* _SAM_IO_ */

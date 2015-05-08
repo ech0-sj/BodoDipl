@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief Board configuration.
+ * \brief Global interrupt management for SAM D20, SAM3 and SAM4 (NVIC based)
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,62 +44,43 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#include "interrupt_sam_nvic.h"
 
-/* Configure UART pins */
-#define CONF_BOARD_UART_CONSOLE
+#if !defined(__DOXYGEN__)
+/* Deprecated - global flag to determine the global interrupt state. Required by
+ * QTouch library, however new applications should use cpu_irq_is_enabled()
+ * which probes the true global interrupt state from the CPU special registers.
+ */
+volatile bool g_interrupt_enabled = true;
+#endif
 
+void cpu_irq_enter_critical(void)
+{
+	if (cpu_irq_critical_section_counter == 0) {
+		if (cpu_irq_is_enabled()) {
+			cpu_irq_disable();
+			cpu_irq_prev_interrupt_state = true;
+		} else {
+			/* Make sure the to save the prev state as false */
+			cpu_irq_prev_interrupt_state = false;
+		}
 
-/* Enable USB interface (USB) for host mode */
-#define CONF_BOARD_USB_PORT
+	}
 
-/* Configure ADC example pins */
-//#define CONF_BOARD_ADC
+	cpu_irq_critical_section_counter++;
+}
 
-/* Configure PWM LED0 pin */
-//#define CONF_BOARD_PWM_LED0
+void cpu_irq_leave_critical(void)
+{
+	/* Check if the user is trying to leave a critical section when not in a critical section */
+	Assert(cpu_irq_critical_section_counter > 0);
 
-/* Configure PWM LED1 pin */
-//#define CONF_BOARD_PWM_LED1
+	cpu_irq_critical_section_counter--;
 
-/* Configure PWM LED2 pin */
-//#define CONF_BOARD_PWM_LED2
+	/* Only enable global interrupts when the counter reaches 0 and the state of the global interrupt flag
+	   was enabled when entering critical state */
+	if ((cpu_irq_critical_section_counter == 0) && (cpu_irq_prev_interrupt_state)) {
+		cpu_irq_enable();
+	}
+}
 
-/* Configure SPI0 pins */
-#define CONF_BOARD_SPI0
-#define CONF_BOARD_SPI0_NPCS0
-/** Spi Hw ID . */
-#define SPI_ID          ID_SPI0
-
-//#define CONF_BOARD_SPI0_NPCS1
-//#define CONF_BOARD_SPI0_NPCS2
-//#define CONF_BOARD_SPI0_NPCS3
-
-/* Configure SPI1 pins */
-//#define CONF_BOARD_SPI1
-//#define CONF_BOARD_SPI1_NPCS0
-//#define CONF_BOARD_SPI1_NPCS1
-//#define CONF_BOARD_SPI1_NPCS2
-//#define CONF_BOARD_SPI1_NPCS3
-
-//#define CONF_BOARD_TWI0
-
-//#define CONF_BOARD_TWI1
-
-/* Configure USART RXD pin */
-//#define CONF_BOARD_USART_RXD
-
-/* Configure USART TXD pin */
-//#define CONF_BOARD_USART_TXD
-
-/* Configure USART CTS pin */
-//#define CONF_BOARD_USART_CTS
-
-/* Configure USART RTS pin */
-//#define CONF_BOARD_USART_RTS
-
-/* Configure USART synchronous communication SCK pin */
-//#define CONF_BOARD_USART_SCK
-
-#endif // CONF_BOARD_H

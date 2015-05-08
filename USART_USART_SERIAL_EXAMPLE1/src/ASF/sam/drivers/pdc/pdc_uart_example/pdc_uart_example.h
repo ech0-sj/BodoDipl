@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Board configuration.
+ * \brief SAM Peripheral DMA Controller Example.
  *
  * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
  *
@@ -44,62 +44,46 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#ifndef PDC_UART_EXAMPLE_H_INCLUDED
+#define PDC_UART_EXAMPLE_H_INCLUDED
 
-/* Configure UART pins */
-#define CONF_BOARD_UART_CONSOLE
+/**
+ * \page asfdoc_sam_drivers_pdc_example Peripheral DMA Controller Example
+ *
+ * \section asfdoc_sam_drivers_pdc_example_purpose Purpose
+ *
+ * The pdc_uart example demonstrates how to use PDC driver to receive/send
+ * data from/to the UART.
+ *
+ * \section asfdoc_sam_drivers_pdc_example_requirements Requirements
+ *
+ * This example can be used on any SAM3/4 boards.
+ *
+ * \section asfdoc_sam_drivers_pdc_example_description Description
+ *
+ * The SAM controller waits for BUFFER_SIZE data to receive from the UART.
+ * As soon as the expected amount of data is received, the whole buffer is
+ * sent back to the terminal.
+ *
+ * \section asfdoc_sam_drivers_pdc_example_usage Usage
+ *
+ * -# Build the program and download it into the evaluation board.
+ * -# On the computer, open, and configure a terminal application
+ *    (e.g., HyperTerminal on Microsoft&reg; Windows&reg;) with these settings:
+ *   - 115200 baud
+ *   - 8 bits of data
+ *   - No parity
+ *   - 1 stop bit
+ *   - No flow control
+ * -# In the terminal window, the following text should appear (values depend
+ *    on the board and chip used):
+     \verbatim
+      -- PDC Uart Example xxx --
+      -- xxxxxx-xx
+      -- Compiled: xxx xx xxxx xx:xx:xx --
+     \endverbatim
+ * -# The sent text should appear.
+ */
 
-
-/* Enable USB interface (USB) for host mode */
-#define CONF_BOARD_USB_PORT
-
-/* Configure ADC example pins */
-//#define CONF_BOARD_ADC
-
-/* Configure PWM LED0 pin */
-//#define CONF_BOARD_PWM_LED0
-
-/* Configure PWM LED1 pin */
-//#define CONF_BOARD_PWM_LED1
-
-/* Configure PWM LED2 pin */
-//#define CONF_BOARD_PWM_LED2
-
-/* Configure SPI0 pins */
-#define CONF_BOARD_SPI0
-#define CONF_BOARD_SPI0_NPCS0
-/** Spi Hw ID . */
-#define SPI_ID          ID_SPI0
-
-//#define CONF_BOARD_SPI0_NPCS1
-//#define CONF_BOARD_SPI0_NPCS2
-//#define CONF_BOARD_SPI0_NPCS3
-
-/* Configure SPI1 pins */
-//#define CONF_BOARD_SPI1
-//#define CONF_BOARD_SPI1_NPCS0
-//#define CONF_BOARD_SPI1_NPCS1
-//#define CONF_BOARD_SPI1_NPCS2
-//#define CONF_BOARD_SPI1_NPCS3
-
-//#define CONF_BOARD_TWI0
-
-//#define CONF_BOARD_TWI1
-
-/* Configure USART RXD pin */
-//#define CONF_BOARD_USART_RXD
-
-/* Configure USART TXD pin */
-//#define CONF_BOARD_USART_TXD
-
-/* Configure USART CTS pin */
-//#define CONF_BOARD_USART_CTS
-
-/* Configure USART RTS pin */
-//#define CONF_BOARD_USART_RTS
-
-/* Configure USART synchronous communication SCK pin */
-//#define CONF_BOARD_USART_SCK
-
-#endif // CONF_BOARD_H
+ #endif /* PDC_UART_EXAMPLE_H_INCLUDED */
+ 

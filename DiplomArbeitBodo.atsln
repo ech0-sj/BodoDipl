@@ -7,6 +7,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "SPI_EXAMPLE1", "SPI_EXAMPLE
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Test_ForeignProject", "Test_ForeignProject\Test_ForeignProject.cproj", "{A70EE671-9F30-4279-896B-0851A117A42F}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "USART_USART_SERIAL_EXAMPLE1", "USART_USART_SERIAL_EXAMPLE1\USART_USART_SERIAL_EXAMPLE1.cproj", "{DE79EE44-041D-499E-8E1E-956E93ED835E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -25,6 +27,10 @@ Global
 		{A70EE671-9F30-4279-896B-0851A117A42F}.Debug|ARM.Build.0 = Debug|ARM
 		{A70EE671-9F30-4279-896B-0851A117A42F}.Release|ARM.ActiveCfg = Release|ARM
 		{A70EE671-9F30-4279-896B-0851A117A42F}.Release|ARM.Build.0 = Release|ARM
+		{DE79EE44-041D-499E-8E1E-956E93ED835E}.Debug|ARM.ActiveCfg = Debug|ARM
+		{DE79EE44-041D-499E-8E1E-956E93ED835E}.Debug|ARM.Build.0 = Debug|ARM
+		{DE79EE44-041D-499E-8E1E-956E93ED835E}.Release|ARM.ActiveCfg = Release|ARM
+		{DE79EE44-041D-499E-8E1E-956E93ED835E}.Release|ARM.Build.0 = Release|ARM
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

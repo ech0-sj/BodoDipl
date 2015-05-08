@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Board configuration.
+ * \brief GPIO service for SAM.
  *
  * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
  *
@@ -44,62 +44,40 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#ifndef SAM_GPIO_H_INCLUDED
+#define SAM_GPIO_H_INCLUDED
 
-/* Configure UART pins */
-#define CONF_BOARD_UART_CONSOLE
+#include "compiler.h"
+#include "pio.h"
 
+#define gpio_pin_is_low(io_id) \
+	(pio_get_pin_value(io_id) ? 0 : 1)
 
-/* Enable USB interface (USB) for host mode */
-#define CONF_BOARD_USB_PORT
+#define gpio_pin_is_high(io_id) \
+	(pio_get_pin_value(io_id) ? 1 : 0)
 
-/* Configure ADC example pins */
-//#define CONF_BOARD_ADC
+#define gpio_set_pin_high(io_id) \
+	pio_set_pin_high(io_id)
 
-/* Configure PWM LED0 pin */
-//#define CONF_BOARD_PWM_LED0
+#define gpio_set_pin_low(io_id) \
+	pio_set_pin_low(io_id)
 
-/* Configure PWM LED1 pin */
-//#define CONF_BOARD_PWM_LED1
+#define gpio_toggle_pin(io_id) \
+	pio_toggle_pin(io_id)
 
-/* Configure PWM LED2 pin */
-//#define CONF_BOARD_PWM_LED2
+#define gpio_configure_pin(io_id,io_flags) \
+	pio_configure_pin(io_id,io_flags)
 
-/* Configure SPI0 pins */
-#define CONF_BOARD_SPI0
-#define CONF_BOARD_SPI0_NPCS0
-/** Spi Hw ID . */
-#define SPI_ID          ID_SPI0
+#define gpio_configure_group(port_id,port_mask,io_flags) \
+	pio_configure_pin_group(port_id,port_mask,io_flags)
 
-//#define CONF_BOARD_SPI0_NPCS1
-//#define CONF_BOARD_SPI0_NPCS2
-//#define CONF_BOARD_SPI0_NPCS3
+#define gpio_set_pin_group_high(port_id,mask) \
+	pio_set_pin_group_high(port_id,mask)
 
-/* Configure SPI1 pins */
-//#define CONF_BOARD_SPI1
-//#define CONF_BOARD_SPI1_NPCS0
-//#define CONF_BOARD_SPI1_NPCS1
-//#define CONF_BOARD_SPI1_NPCS2
-//#define CONF_BOARD_SPI1_NPCS3
+#define gpio_set_pin_group_low(port_id,mask) \
+	pio_set_pin_group_low(port_id,mask)
 
-//#define CONF_BOARD_TWI0
+#define gpio_toggle_pin_group(port_id,mask) \
+	pio_toggle_pin_group(port_id,mask)
 
-//#define CONF_BOARD_TWI1
-
-/* Configure USART RXD pin */
-//#define CONF_BOARD_USART_RXD
-
-/* Configure USART TXD pin */
-//#define CONF_BOARD_USART_TXD
-
-/* Configure USART CTS pin */
-//#define CONF_BOARD_USART_CTS
-
-/* Configure USART RTS pin */
-//#define CONF_BOARD_USART_RTS
-
-/* Configure USART synchronous communication SCK pin */
-//#define CONF_BOARD_USART_SCK
-
-#endif // CONF_BOARD_H
+#endif /* SAM_GPIO_H_INCLUDED */

@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Board configuration.
+ * \brief Syscalls for SAM (GCC).
  *
  * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
  *
@@ -44,62 +44,102 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
-/* Configure UART pins */
-#define CONF_BOARD_UART_CONSOLE
+/// @cond 0
+/**INDENT-OFF**/
+#ifdef __cplusplus
+extern "C" {
+#endif
+/**INDENT-ON**/
+/// @endcond
 
+#undef errno
+extern int errno;
+extern int _end;
+extern int __ram_end__;
 
-/* Enable USB interface (USB) for host mode */
-#define CONF_BOARD_USB_PORT
+extern caddr_t _sbrk(int incr);
+extern int link(char *old, char *new);
+extern int _close(int file);
+extern int _fstat(int file, struct stat *st);
+extern int _isatty(int file);
+extern int _lseek(int file, int ptr, int dir);
+extern void _exit(int status);
+extern void _kill(int pid, int sig);
+extern int _getpid(void);
 
-/* Configure ADC example pins */
-//#define CONF_BOARD_ADC
+extern caddr_t _sbrk(int incr)
+{
+	static unsigned char *heap = NULL;
+	unsigned char *prev_heap;
+	int ramend = (int)&__ram_end__;
 
-/* Configure PWM LED0 pin */
-//#define CONF_BOARD_PWM_LED0
+	if (heap == NULL) {
+		heap = (unsigned char *)&_end;
+	}
+	prev_heap = heap;
 
-/* Configure PWM LED1 pin */
-//#define CONF_BOARD_PWM_LED1
+	if (((int)prev_heap + incr) > ramend) {
+		return (caddr_t) -1;	
+	}
 
-/* Configure PWM LED2 pin */
-//#define CONF_BOARD_PWM_LED2
+	heap += incr;
 
-/* Configure SPI0 pins */
-#define CONF_BOARD_SPI0
-#define CONF_BOARD_SPI0_NPCS0
-/** Spi Hw ID . */
-#define SPI_ID          ID_SPI0
+	return (caddr_t) prev_heap;
+}
 
-//#define CONF_BOARD_SPI0_NPCS1
-//#define CONF_BOARD_SPI0_NPCS2
-//#define CONF_BOARD_SPI0_NPCS3
+extern int link(char *old, char *new)
+{
+	return -1;
+}
 
-/* Configure SPI1 pins */
-//#define CONF_BOARD_SPI1
-//#define CONF_BOARD_SPI1_NPCS0
-//#define CONF_BOARD_SPI1_NPCS1
-//#define CONF_BOARD_SPI1_NPCS2
-//#define CONF_BOARD_SPI1_NPCS3
+extern int _close(int file)
+{
+	return -1;
+}
 
-//#define CONF_BOARD_TWI0
+extern int _fstat(int file, struct stat *st)
+{
+	st->st_mode = S_IFCHR;
 
-//#define CONF_BOARD_TWI1
+	return 0;
+}
 
-/* Configure USART RXD pin */
-//#define CONF_BOARD_USART_RXD
+extern int _isatty(int file)
+{
+	return 1;
+}
 
-/* Configure USART TXD pin */
-//#define CONF_BOARD_USART_TXD
+extern int _lseek(int file, int ptr, int dir)
+{
+	return 0;
+}
 
-/* Configure USART CTS pin */
-//#define CONF_BOARD_USART_CTS
+extern void _exit(int status)
+{
+	printf("Exiting with status %d.\n", status);
 
-/* Configure USART RTS pin */
-//#define CONF_BOARD_USART_RTS
+	for (;;);
+}
 
-/* Configure USART synchronous communication SCK pin */
-//#define CONF_BOARD_USART_SCK
+extern void _kill(int pid, int sig)
+{
+	return;
+}
 
-#endif // CONF_BOARD_H
+extern int _getpid(void)
+{
+	return -1;
+}
+
+/// @cond 0
+/**INDENT-OFF**/
+#ifdef __cplusplus
+}
+#endif
+/**INDENT-ON**/
+/// @endcond

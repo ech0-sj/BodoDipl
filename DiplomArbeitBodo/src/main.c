@@ -113,7 +113,7 @@ int main (void)
 	
 	
 	led_config();
-	SPIMaster_Init( SPICLK_1Hz );
+	SPIMaster_Init( SPICLK_1MHz );
 	
 	/* Insert application code here, after the board has been initialized. */
 	

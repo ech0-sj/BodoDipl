@@ -12,7 +12,7 @@
 
 void SPIMaster_Init( eSPIClockConfig clockConfig )
 {
-	gs_ul_spi_clock = gs_ul_clock_configurations[clockConfig];
+	uint32_t spi_clock = gs_ul_clock_configurations[clockConfig];
 
 	// setup interrupts ( warum? )
 	NVIC_DisableIRQ(SPI0_IRQn);
@@ -39,7 +39,7 @@ void SPIMaster_Init( eSPIClockConfig clockConfig )
 	spi_set_bits_per_transfer(SPI_MASTER_BASE, SPI_CHIP_SEL,
 	SPI_CSR_BITS_8_BIT);
 	spi_set_baudrate_div(SPI_MASTER_BASE, SPI_CHIP_SEL,
-	(sysclk_get_cpu_hz() / gs_ul_spi_clock));
+	(sysclk_get_cpu_hz() / spi_clock));
 	spi_set_transfer_delay(SPI_MASTER_BASE, SPI_CHIP_SEL, SPI_DLYBS,
 	SPI_DLYBCT);
 	spi_enable(SPI_MASTER_BASE);

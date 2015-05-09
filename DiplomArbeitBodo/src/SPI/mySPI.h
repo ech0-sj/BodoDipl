@@ -15,8 +15,8 @@ http://www.avrfreaks.net/forum/need-help-setting-spi-interface-lsb-first-sam3x8e
 #ifndef MYSPI_H_
 #define MYSPI_H_
 
-#include <../asf.h>
-#include <spi.h>
+#include <asf.h>
+// #include <spi.h>
 
  #define VERSION_1
 

@@ -108,7 +108,8 @@ void 	wizchip_bus_writebyte(uint32_t AddrSel, uint8_t wb)  { *((volatile uint8_t
  * null function is called.
  */
 uint8_t wizchip_spi_readbyte(void)        
-{ 
+{
+	return 0; 
 }
 /**
  * @brief Default function to write in SPI interface.

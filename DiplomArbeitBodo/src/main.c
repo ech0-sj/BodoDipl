@@ -120,6 +120,8 @@ int main (void)
 		usart_putchar( WIFI_USART, 'a');
 		SetupNetSetting( &gWIZNETINFO ); 
 		W5500_Init( &gWIZNETINFO ); 
+		// Test_SPI();
+		
 		
 		SwitchOffLED0();
 		Delay_ms( 1000 );

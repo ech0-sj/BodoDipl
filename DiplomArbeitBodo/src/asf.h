@@ -85,14 +85,21 @@
 #include <exceptions.h>
 
 // From module: SPI - SAM Implementation
-#include <spi_master.h>
-#include <spi_master.h>
 
 // From module: SPI - Serial Peripheral Interface
 #include <spi.h>
 
+// From module: Standard serial I/O (stdio) - SAM implementation
+#include <stdio_serial.h>
+
 // From module: System Clock Control - SAM3X/A implementation
 #include <sysclk.h>
+
+// From module: UART - Univ. Async Rec/Trans
+#include <uart.h>
+
+// From module: USART - Serial interface - SAM implementation for devices with both UART and USART
+#include <serial.h>
 
 // From module: USART - Univ. Syn Async Rec/Trans
 #include <usart.h>

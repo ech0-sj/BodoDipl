@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Board configuration.
+ * \brief Serial USART service configuration.
  *
  * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
  *
@@ -44,26 +44,28 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#ifndef CONF_USART_SERIAL_H
+#define CONF_USART_SERIAL_H
 
-/* Configure UART pins */
-#define CONF_BOARD_UART_CONSOLE
-/* USART0 module is used in serial mode. */
-#define CONF_BOARD_USART_RXD
-#define CONF_BOARD_USART_TXD
-
-/** Usart Hw ID used by the console (UART). */
-#define CONSOLE_UART_ID          ID_UART
-
-/** SPI0 MACRO definition */
-#define CONF_BOARD_SPI0
-
-/** SPI0 slave select0 MACRO definition, sollte PA28 sein */
-#define CONF_BOARD_SPI0_NPCS0
-
-/** Spi Hw ID . */
-// #define SPI_ID          ID_SPI0
+/* A reference setting for UART */
+/** UART Interface */
+//#define CONF_UART            CONSOLE_UART
+/** Baudrate setting */
+//#define CONF_UART_BAUDRATE   115200
+/** Parity setting */
+//#define CONF_UART_PARITY     UART_MR_PAR_NO
 
 
-#endif // CONF_BOARD_H
+/* A reference setting for USART */
+/** USART Interface */
+//#define CONF_UART              USART1
+/** Baudrate setting */
+//#define CONF_UART_BAUDRATE     115200
+/** Character length setting */
+//#define CONF_UART_CHAR_LENGTH  US_MR_CHRL_8_BIT
+/** Parity setting */
+//#define CONF_UART_PARITY       US_MR_PAR_NO
+/** Stop bits setting */
+//#define CONF_UART_STOP_BITS    US_MR_NBSTOP_1_BIT
+
+#endif/* CONF_USART_SERIAL_H_INCLUDED */

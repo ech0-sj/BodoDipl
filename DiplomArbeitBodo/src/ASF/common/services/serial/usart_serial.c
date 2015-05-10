@@ -1,9 +1,11 @@
 /**
+ *
  * \file
  *
- * \brief Board configuration.
+ * \brief USART Serial driver functions.
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ *
+ * Copyright (c) 2010-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -43,27 +45,43 @@
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
+#include "serial.h"
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
-
-/* Configure UART pins */
-#define CONF_BOARD_UART_CONSOLE
-/* USART0 module is used in serial mode. */
-#define CONF_BOARD_USART_RXD
-#define CONF_BOARD_USART_TXD
-
-/** Usart Hw ID used by the console (UART). */
-#define CONSOLE_UART_ID          ID_UART
-
-/** SPI0 MACRO definition */
-#define CONF_BOARD_SPI0
-
-/** SPI0 slave select0 MACRO definition, sollte PA28 sein */
-#define CONF_BOARD_SPI0_NPCS0
-
-/** Spi Hw ID . */
-// #define SPI_ID          ID_SPI0
+/**
+ * \brief Send a sequence of bytes to USART device
+ *
+ * \param usart  Base address of the USART instance.
+ * \param data   Data buffer to read
+ * \param len    Length of data
+ *
+ */
+status_code_t usart_serial_write_packet(usart_if usart, const uint8_t *data,
+		size_t len)
+{
+	while (len) {
+		usart_serial_putchar(usart, *data);
+		len--;
+		data++;
+	}
+	return STATUS_OK;
+}
 
 
-#endif // CONF_BOARD_H
+/**
+ * \brief Receive a sequence of bytes from USART device
+ *
+ * \param usart  Base address of the USART instance.
+ * \param data   Data buffer to write
+ * \param len    Length of data
+ *
+ */
+status_code_t usart_serial_read_packet(usart_if usart, uint8_t *data,
+		size_t len)
+{
+	while (len) {
+		usart_serial_getchar(usart, data);
+		len--;
+		data++;
+	}
+	return STATUS_OK;
+}

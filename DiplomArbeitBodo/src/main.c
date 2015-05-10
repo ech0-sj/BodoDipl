@@ -28,7 +28,11 @@
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
-#include <asf.h>
+#include "asf.h"
+#include "stdio_serial.h"
+#include "conf_board.h"
+#include "conf_clock.h"
+
 #include "Systimer/Systimer.h"
 #include "SPI/mySPI.h"
 #include "Usart/myUsart.h"
@@ -59,14 +63,22 @@ int main (void)
 {
 	/* Insert system clock initialization code here (sysclk_init()). */
 	sysclk_init();
+	/* init.c ... Die Pins für MISO, MOSI, CLK, 
+	und USART RX USART TX werden per gpio() eingestellt */ 
 	board_init();
-	// ioport_init();
+	ioport_init();
+	
+	// SPI initialisieren 
+	SPIMaster_Init( SPICLK_1MHz );
+	
+	// Usarts initialisieren
+	USARTWifi_Init( 9600 );
+	
+	
 	SysTick_Config(sysclk_get_cpu_hz() / 1000);
 	
 	led_config();
-	SPIMaster_Init( SPICLK_1MHz );
 	
-	USARTWifi_Init( 9600 );
 		
 	while( 1 )
 	{
@@ -76,7 +88,7 @@ int main (void)
 		usart_putchar( WIFI_USART, 'a');
 		SetupNetSetting( &gWIZNETINFO ); 
 		W5500_Init( &gWIZNETINFO ); 
-		// Test_SPI();
+		//Test_SPI();
 		
 		
 		SwitchOffLED0();

@@ -454,6 +454,13 @@ int main(void)
 				display_main_menu();
 				break;
 
+			case 'a': 
+			case 'A':
+			{
+				uint32_t charSend = 'a';
+				usart_write( BOARD_USART, charSend );
+			}break;
+
 			default:
 				break;
 			}

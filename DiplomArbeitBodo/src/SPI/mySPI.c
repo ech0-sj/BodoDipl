@@ -6,19 +6,13 @@
  */ 
 
 #include "mySPI.h"
-
+#include "spi_master.h"
 
 #ifdef VERSION_1
 
 void SPIMaster_Init( eSPIClockConfig clockConfig )
 {
 	uint32_t spi_clock = gs_ul_clock_configurations[clockConfig];
-
-	// setup interrupts ( warum? )
-	NVIC_DisableIRQ(SPI0_IRQn);
-	NVIC_ClearPendingIRQ(SPI0_IRQn);
-	NVIC_SetPriority(SPI0_IRQn, 0);
-	NVIC_EnableIRQ(SPI0_IRQn);
 
 	#if (SAMG55)
 	/* Enable the peripheral and set SPI mode. */
@@ -58,28 +52,30 @@ void SPIMaster_Transfer(void *inOutBuffer, uint32_t size)
 	p_buffer = inOutBuffer;
 
 	for (i = 0; i < size; i++) {
-		spi_write(SPI_MASTER_BASE, p_buffer[i], 0, 0);
+		// spi_write(SPI_MASTER_BASE, p_buffer[i], 0, 0);
+		SPIMaster_WriteByte( p_buffer[i]);
 		p_buffer[i] = 0xFF;
 		/* Wait transfer done. */
-		while ((spi_read_status(SPI_MASTER_BASE) & SPI_SR_RDRF) == 0);
-		spi_read(SPI_MASTER_BASE, &data, &uc_pcs);
-		p_buffer[i] = data;
+		// while ((spi_read_status(SPI_MASTER_BASE) & SPI_SR_RDRF) == 0);
+		
+		p_buffer[i] = SPIMaster_ReadByte();
+		// spi_read(SPI_MASTER_BASE, &data, &uc_pcs);
+		// p_buffer[i] = data;
 	}
 }
 
 void SPIMaster_WriteByte( uint8_t inBuf )
 {
-	uint16_t bufAs16Bit = inBuf;
-	spi_write(SPI_MASTER_BASE, bufAs16Bit, 0, 0);
+	spi_write(SPI_MASTER_BASE, inBuf, 0, 0);
 	while ((spi_read_status(SPI_MASTER_BASE) & SPI_SR_RDRF) == 0);
 }
 
 uint8_t SPIMaster_ReadByte( void )
 {
-	uint16_t bufAs16Bit;
+	uint8_t readByte;
 	uint8_t uc_pcs;
-	spi_read(SPI_MASTER_BASE, &bufAs16Bit, &uc_pcs);
-	return (uint8_t)(bufAs16Bit & 0xFF);
+	spi_read(SPI_MASTER_BASE, &readByte, &uc_pcs);
+	return readByte;
 }
 
 void SPIMaster_SelectCS( void )
@@ -95,6 +91,9 @@ void SPIMaster_DeselectCS( void )
 
 #else 
 
+
+// #include "spi_master.h"
+
 struct spi_device  gSPI_ETHDEVICE = { .id = 0, };
 
 void SPIMaster_Init(eSPIClockConfig clockConfig )
@@ -103,7 +102,7 @@ void SPIMaster_Init(eSPIClockConfig clockConfig )
 	uint32_t spiClock = gs_ul_clock_configurations[clockConfig];
 	 
 	spi_master_init( USED_SPI );
-	spi_master_setup_device( USED_SPI, &gSPI_ETHDEVICE, SPI_MODE_3, spiClock, 1 );
+	spi_master_setup_device( USED_SPI, &gSPI_ETHDEVICE, SPI_MODE_3, spiClock, 0 );
 	spi_enable( USED_SPI );
 }
 

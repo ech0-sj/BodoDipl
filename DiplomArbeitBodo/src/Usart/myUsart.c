@@ -19,7 +19,7 @@ UsartReceiveBuffer gWifiRecvBuffer = {
 void USARTWifi_Init( uint32_t baudrate )
 {
 	sam_usart_opt_t usart_console_settings = {
-		baudrate,
+		baudrate*2,
 		US_MR_CHRL_8_BIT,
 		US_MR_PAR_NO,
 		US_MR_NBSTOP_1_BIT,
@@ -57,7 +57,8 @@ void USARTWifi_Write( uint8_t* buffer, uint32_t bufLen )
 	for( i = 0; i < bufLen; i++ )
 	{
 		actChar = buffer[i]; 
-		usart_write( WIFI_USART, actChar ); 
+		usart_putchar( WIFI_USART, buffer[i]);
+		// usart_write( WIFI_USART, actChar ); 
 	}
 	
 }

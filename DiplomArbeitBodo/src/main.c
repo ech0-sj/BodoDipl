@@ -29,7 +29,7 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 #include "asf.h"
-#include "stdio_serial.h"
+#include "string.h"
 #include "conf_board.h"
 #include "conf_clock.h"
 
@@ -61,38 +61,44 @@ extern uint32_t gDEBUGVAR;
 
 int main (void)
 {
+	uint8_t usartMsg[100]; 
+	uint32_t usartMsglen; 
 	/* Insert system clock initialization code here (sysclk_init()). */
 	sysclk_init();
+	SysTick_Config(sysclk_get_cpu_hz() / 1000);
+	
 	/* init.c ... Die Pins für MISO, MOSI, CLK, 
 	und USART RX USART TX werden per gpio() eingestellt */ 
 	board_init();
 	ioport_init();
 	
 	// SPI initialisieren 
-	SPIMaster_Init( SPICLK_1MHz );
+	SPIMaster_Init( SPICLK_500kHz );
 	
 	// Usarts initialisieren
-	USARTWifi_Init( 9600 );
+	USARTWifi_Init( 115200 );
 	
-	
-	SysTick_Config(sysclk_get_cpu_hz() / 1000);
-	
+	// init Status LEDs 
 	led_config();
 	
 		
 	while( 1 )
 	{
 		SwitchOnLED0();
-		Delay_ms( 1000 );
+		Delay_ms( 100 );
 		
-		usart_putchar( WIFI_USART, 'a');
-		SetupNetSetting( &gWIZNETINFO ); 
-		W5500_Init( &gWIZNETINFO ); 
-		//Test_SPI();
+		strcpy( usartMsg, "AT+GMR\r\n");
+		usartMsglen = strlen( usartMsg );
+		
+		USARTWifi_Write( usartMsg, usartMsglen );
+		// usart_putchar( WIFI_USART, 'a');
+		// SetupNetSetting( &gWIZNETINFO ); 
+		// W5500_Init( &gWIZNETINFO ); 
+		// Test_SPI();
 		
 		
 		SwitchOffLED0();
-		Delay_ms( 1000 );
+		Delay_ms( 100 );
 	}
 }
 
@@ -100,26 +106,15 @@ int main (void)
 void Test_SPI( void )
 {	
 	uint8_t buffer[100];
-	uint8_t bufferIn[100];
 	uint32_t buflen = 100; 
 	volatile uint32_t i; 
 	
 	for( i = 0; i < buflen; i++ )
 	{
-		bufferIn[i] = i;
 		buffer[i] = i; 
 	}
 	
 	SPIMaster_Transfer( buffer, buflen ); 
-	
-	for( i = 0; i < buflen; i++ )
-	{
-		if( bufferIn[i] != buffer[i] )
-		{
-			// error 
-			i = buflen * 2; 
-		}
-	}
 	
 }
 

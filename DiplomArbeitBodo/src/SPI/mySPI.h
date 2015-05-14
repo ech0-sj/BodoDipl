@@ -18,7 +18,7 @@ http://www.avrfreaks.net/forum/need-help-setting-spi-interface-lsb-first-sam3x8e
 #include <asf.h>
 // #include <spi.h>
 
- #define VERSION_1
+  #define VERSION_1
 
 
 #define USED_SPI	SPI0
@@ -56,10 +56,16 @@ typedef enum
  /* Delay between consecutive transfers. */
  #define SPI_DLYBCT 0x10
 
-
+/*	SPI 
+	mode	clkPol	clkPhase
+	0		0		1
+	1		0		0
+	2		1		1
+	3		1		0 
+*/ 
 
  /* Clock polarity. */
- #define SPI_CLK_POLARITY 0
+ #define SPI_CLK_POLARITY 1
  /* Clock phase. */
  #define SPI_CLK_PHASE 0
 

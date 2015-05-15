@@ -9,26 +9,27 @@
 #include "Proc_Serial.h"
 #include "SysTimer/SysTimer.h"
 #include "string.h"
+#include "malloc.h"
 
-void ProcSerial_InitCmdBuf( SerialCmdBuffer* buffer ); 
-enum status_code ProcSerial_DoConsole( SerialCmdBuffer* cmdbuf );
-enum status_code ProcSerial_DoWifi( SerialCmdBuffer* cmdbuf );
-
+enum status_code ProcSerial_InterpreteRecv( eSerialPort serport, SerialCmdBuffer* cmdBuf, uint8_t readChar );
 serialProcStruct gSerProcStruct;
 
 
 
-void ProcSerial()
+void ProcSerial( ProcessStruct* procStruct )
 {
-	uint32_t serport = 0; 
+	eSerialPort serport = 0; 
 	uint8_t readChar;  
+	serialProcStruct* serprocStruct; 
 	SerialCmdBuffer* cmdBuf; 
+	
+	serprocStruct = (serialProcStruct*)procStruct->specified;
 	
 	// Durch alle definierten seriellen Schnittstellen gehen 
 	// und neue Daten prüfen und versuchen Nachrichten auszuwerten  
 	for( serport = 0; serport < Serport_Count; serport++ )
 	{
-		cmdBuf = &gSerProcStruct.cmdbuf[serport]; 
+		cmdBuf = &serprocStruct->cmdbuf[serport]; 
 		
 		// alle empfangenen Bytes auswerten 
 		// 1. angefangene Nachricht in Buffer merken ( immer nur eine Nachricht darin )
@@ -36,20 +37,7 @@ void ProcSerial()
 		// 3. Auswerten 
 		while( myUSART_GetByteFromBuffer(serport, &readChar ) == STATUS_OK )
 		{
-			cmdBuf->buffer[cmdBuf->nextWrite] = readChar; 
-			cmdBuf->nextWrite += 1;
-			cmdBuf->lastRecv = Get_systime_ms();
-			  
-			switch( serport )
-			{
-				case Serport_Console: 
-				ProcSerial_DoConsole( cmdBuf ); 
-				break; 
-				
-				case Serport_Wifi: 
-				ProcSerial_DoWifi( cmdBuf );
-				break; 
-			}
+			ProcSerial_InterpreteRecv( serport, cmdBuf, readChar ); 	
 		}
 		
 		// Falls eine gewisse Zeit keine Bytes mehr empfangen werden
@@ -59,9 +47,14 @@ void ProcSerial()
 	}
 }
 
-void ProcSerial_Init(void)
+void ProcSerial_Init( ProcessStruct* procStruct )
 {
 	uint32_t serport; 
+	
+	procStruct->pid	= PID_Serial;
+	procStruct->prio = Prio_Normal;
+	procStruct->state = ProcState_Running;
+	procStruct->specified = &gSerProcStruct;		// todo: hier mit malloc erzeugen 
 	
 	for( serport = 0; serport < Serport_Count; serport ++ )
 	{
@@ -78,29 +71,28 @@ void ProcSerial_InitCmdBuf( SerialCmdBuffer* cmdBuf )
 
 
 
-enum status_code ProcSerial_DoConsole( SerialCmdBuffer* cmdbuf )
+enum status_code ProcSerial_InterpreteRecv( eSerialPort serport, SerialCmdBuffer* cmdBuf, uint8_t readChar )
 {
-	uint32_t pos = cmdbuf->nextWrite; 
+	cmdBuf->buffer[cmdBuf->nextWrite] = readChar;
+	cmdBuf->nextWrite += 1;
+	cmdBuf->lastRecv = Get_systime_ms();
 	
-	// korrektur: pos steht schon auf nächsem Feld
-	if( cmdbuf->buffer[pos -1] == PROCSER_CONS_ENDBYTE )
+	switch( serport )
 	{
-		USARTCons_Write( cmdbuf->buffer, pos );
-		ProcSerial_InitCmdBuf( cmdbuf );  
+		case Serport_Console:
+		ProcSerial_DoConsole( cmdBuf );
+		break;
+		
+		case Serport_Wifi:
+		ProcSerial_DoWifi( cmdBuf );
+		break;
+		
+		
+		// weitere Protokolle hier 
+		
 	}
+	
 	return STATUS_OK;
 }
 
-// debug -> auf cons ausgeben
-enum status_code ProcSerial_DoWifi( SerialCmdBuffer* cmdbuf )
-{
-	uint32_t pos = cmdbuf->nextWrite;
-	
-	// korrektur: pos steht schon auf nächsem Feld
-	if( cmdbuf->buffer[pos -1] == PROCSER_CONS_ENDBYTE )
-	{
-		USARTCons_Write( cmdbuf->buffer, pos );
-		ProcSerial_InitCmdBuf( cmdbuf );
-	}
-	return STATUS_OK;
-};
+

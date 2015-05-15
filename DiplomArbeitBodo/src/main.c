@@ -40,6 +40,7 @@
 #include "Wiznet/wizchip_conf.h"
 
 #include "Proc_Serial/Proc_Serial.h"
+#include "Schedule/Scheduler.h"
 
 
 void Test_SPI( void );
@@ -69,6 +70,8 @@ int main (void)
 	uint32_t wifiBaudrate = WIFI_USART_BAUD;
 	eSPIClockConfig spiclock = SPICLK_500kHz;
 	
+	ProcessStruct procSerial; 
+	
 	
 	uint8_t usartMsg[100]; 
 	uint32_t usartMsglen; 
@@ -91,17 +94,34 @@ int main (void)
 	// init Status LEDs 
 	led_config();
 
-	ProcSerial_Init();
 
+	// ProzessManager anlegen 
+	Scheduler_Init( );
+
+	// den seriellen Empf. Prozess anlegen 
+	ProcSerial_Init( &procSerial );
+	Scheduler_Register( &procSerial, ProcSerial ); 
+	
+	// init fertig -> welcome zeigen 
 	printf( "Bodo Janssen ... arduino due...\n" );
 	printf( "Welcome \n");
 	printf( "init done, start application \n" );
+		
+		
+		
+	// Applikation starten 	
+	Scheduler_Schedule();	
+		
+		
+		return ;
+		
+		
 		
 	while( 1 )
 	{
 		SwitchOnLED0();
 		Delay_ms( 100 );
-		
+		/*
 		strcpy( usartMsg, "AT+GMR\r\n");
 		usartMsglen = strlen( usartMsg );
 		
@@ -112,7 +132,9 @@ int main (void)
 		// Test_SPI();
 		
 		
-		ProcSerial();
+		ProcSerial( &procSerial );
+		*/ 
+		
 		
 		SwitchOffLED0();
 		Delay_ms( 100 );

@@ -9,6 +9,10 @@
 #ifndef PROC_SERIAL_H_
 #define PROC_SERIAL_H_
 
+#include <asf.h>
+#include "Usart/myUsart.h"
+#include "Schedule/Scheduler.h"
+
 #define PROCSER_CHAR_TIMEOUT	50		/* wenn 50ms kein Byte kam, angefangene msg verwerfen */ 
 #define PROCSER_CONS_ENDBYTE	0x0A	/* Console endezeichen LF*/
 
@@ -29,8 +33,15 @@ typedef struct
 
 
 
-void ProcSerial( void ); 
-void ProcSerial_Init( void );
+void ProcSerial( ProcessStruct* procStruct ); 
+void ProcSerial_Init( ProcessStruct* procStruct );
+void ProcSerial_InitCmdBuf( SerialCmdBuffer* buffer );
+
+
+enum status_code ProcSerial_DoConsole( SerialCmdBuffer* cmdbuf );
+enum status_code ProcSerial_DoWifi( SerialCmdBuffer* cmdbuf );
+
+
 
 
 #endif /* PROC_SERIAL_H_ */

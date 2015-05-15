@@ -30,6 +30,7 @@
  */
 #include "asf.h"
 #include "string.h"
+#include "conf_uart_serial.h"
 #include "conf_board.h"
 #include "conf_clock.h"
 
@@ -37,6 +38,9 @@
 #include "SPI/mySPI.h"
 #include "Usart/myUsart.h"
 #include "Wiznet/wizchip_conf.h"
+
+#include "Proc_Serial/Proc_Serial.h"
+
 
 void Test_SPI( void );
 void SetupNetSetting( wiz_NetInfo* wiznetInfo );
@@ -61,6 +65,11 @@ extern uint32_t gDEBUGVAR;
 
 int main (void)
 {
+	uint32_t consoleBaudrate = CONS_USART_BAUD;
+	uint32_t wifiBaudrate = WIFI_USART_BAUD;
+	eSPIClockConfig spiclock = SPICLK_500kHz;
+	
+	
 	uint8_t usartMsg[100]; 
 	uint32_t usartMsglen; 
 	/* Insert system clock initialization code here (sysclk_init()). */
@@ -73,14 +82,20 @@ int main (void)
 	ioport_init();
 	
 	// SPI initialisieren 
-	SPIMaster_Init( SPICLK_500kHz );
-	
+	SPIMaster_Init( spiclock );
+			
 	// Usarts initialisieren
-	USARTWifi_Init( 115200 );
+	USARTWifi_Init( wifiBaudrate );
+	USARTCons_Init( consoleBaudrate );
 	
 	// init Status LEDs 
 	led_config();
-	
+
+	ProcSerial_Init();
+
+	printf( "Bodo Janssen ... arduino due...\n" );
+	printf( "Welcome \n");
+	printf( "init done, start application \n" );
 		
 	while( 1 )
 	{
@@ -90,12 +105,14 @@ int main (void)
 		strcpy( usartMsg, "AT+GMR\r\n");
 		usartMsglen = strlen( usartMsg );
 		
-		USARTWifi_Write( usartMsg, usartMsglen );
+		 USARTWifi_Write( usartMsg, usartMsglen );
 		// usart_putchar( WIFI_USART, 'a');
 		// SetupNetSetting( &gWIZNETINFO ); 
 		// W5500_Init( &gWIZNETINFO ); 
 		// Test_SPI();
 		
+		
+		ProcSerial();
 		
 		SwitchOffLED0();
 		Delay_ms( 100 );

@@ -196,4 +196,16 @@ void board_init(void)
 	gpio_configure_pin(SPI0_SPCK_GPIO, SPI0_SPCK_FLAGS);
 	gpio_configure_pin(SPI0_NPCS0_GPIO, SPI0_NPCS0_FLAGS);
 #endif
+
+#ifdef CONF_BOARD_USART1_RXD
+/* Configure USART RXD pin */
+gpio_configure_pin(PIN_USART1_RXD_IDX, PIN_USART1_RXD_FLAGS);
+#endif
+
+#ifdef CONF_BOARD_USART1_TXD
+/* Configure USART TXD pin */
+gpio_configure_pin(PIN_USART1_TXD_IDX, PIN_USART1_TXD_FLAGS);
+#endif
+
+
 }

@@ -12,29 +12,51 @@
 #define MYUSART_H_
 
 #include <asf.h>
+#include "status_codes.h"
 
-// Falls auf einen anderen USART gewechselt wird, 
-// müssen diese Defines angepasst werden 
-#define WIFI_USART				USART0
-#define WIFI_USART_ID			ID_USART0
-#define WIFI_USART_IRQn			USART0_IRQn
-#define WIFI_USART_IRQHANDLER	USART0_Handler
+// portsetup in : conf_usart.h
+
 
 #define ALL_INTERRUPT_MASK  0xffffffff
 
-
-#define USART_RECV_LEN		4096	/* 4k byte groß */ 
+// Den Buffer zeitnah durch einen Ringbuffer tauschen 
+// ansonsten gehts schnell kaputt
+#define USART_RECV_LEN		1024	/* 4k byte groß */ 
 typedef struct  
 {
+	uint32_t bufSize;
+	uint32_t nextRead; 
+	uint32_t nextWrite; 
 	uint8_t buffer[USART_RECV_LEN];
-	uint32_t filled; 
-	uint32_t position; 
-	uint32_t size; 
 }UsartReceiveBuffer;
+
+typedef enum
+{
+	Serport_Wifi	= 0,
+	Serport_Console,
+	// add here
+		
+	Serport_Count	
+}eSerialPort;
+
+
+void myUSART_Init( Usart* serPort, uint32_t serPortID, IRQn_Type irqtype,  uint32_t baudrate);
+void myUSART_Clear( Usart* serPort );
+void myUSART_Write( Usart* serPort, uint8_t* buffer, uint32_t bufLen );
+
+void myUSART_InitRecvBuffer( UsartReceiveBuffer* usartbuffer ); 
+UsartReceiveBuffer* myUSART_GetRecvBuffer( eSerialPort serport );
+enum status_code myUSART_GetByteFromBuffer( eSerialPort serport, uint8_t* readChar );
+enum status_code myUSART_AddByteToBuffer( eSerialPort, uint8_t writeByte );
 
 // always 8n1 by default ;) 
 void USARTWifi_Init( uint32_t baudrate ); 
 void USARTWifi_Clear( void ); 
 void USARTWifi_Write( uint8_t* buffer, uint32_t bufLen );
+
+void USARTCons_Init( uint32_t baudrate );
+void USARTCons_Clear( void );
+void USARTCons_Write( uint8_t* buffer, uint32_t bufLen );
+
 
 #endif /* MYUSART_H_ */

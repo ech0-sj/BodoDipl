@@ -44,9 +44,7 @@ void SPIMaster_Init( eSPIClockConfig clockConfig )
 void SPIMaster_Transfer(void *inOutBuffer, uint32_t size)
 {
 	uint32_t i;
-	uint8_t uc_pcs;
-	static uint16_t data;
-
+	
 	uint8_t *p_buffer;
 
 	p_buffer = inOutBuffer;
@@ -73,8 +71,9 @@ void SPIMaster_WriteByte( uint8_t inBuf )
 uint8_t SPIMaster_ReadByte( void )
 {
 	uint8_t readByte;
-	uint8_t uc_pcs;
-	spi_read(SPI_MASTER_BASE, &readByte, &uc_pcs);
+	// uint8_t uc_pcs;
+	// spi_read(SPI_MASTER_BASE, &readByte, &uc_pcs);
+	spi_read_single(SPI_MASTER_BASE, &readByte );
 	return readByte;
 }
 

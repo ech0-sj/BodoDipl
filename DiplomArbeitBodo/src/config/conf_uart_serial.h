@@ -49,11 +49,11 @@
 
 /* A reference setting for UART */
 /** UART Interface */
-//#define CONF_UART            CONSOLE_UART
+// #define CONF_UART            CONSOLE_UART
 /** Baudrate setting */
-//#define CONF_UART_BAUDRATE   115200
+// #define CONF_UART_BAUDRATE   115200
 /** Parity setting */
-//#define CONF_UART_PARITY     UART_MR_PAR_NO
+// #define CONF_UART_PARITY     UART_MR_PAR_NO
 
 
 /* A reference setting for USART */
@@ -67,5 +67,19 @@
 //#define CONF_UART_PARITY       US_MR_PAR_NO
 /** Stop bits setting */
 //#define CONF_UART_STOP_BITS    US_MR_NBSTOP_1_BIT
+
+#define WIFI_USART				USART0
+#define WIFI_USART_ID			ID_USART0
+#define WIFI_USART_IRQn			USART0_IRQn
+#define WIFI_USART_IRQHANDLER	USART0_Handler
+#define WIFI_USART_BAUD			115200
+
+
+// setup für die Console
+#define CONS_USART				USART1
+#define CONS_USART_ID			ID_USART1
+#define CONS_USART_IRQn			USART1_IRQn
+#define CONS_USART_IRQHANDLER	USART1_Handler
+#define CONS_USART_BAUD			115200
 
 #endif/* CONF_USART_SERIAL_H_INCLUDED */

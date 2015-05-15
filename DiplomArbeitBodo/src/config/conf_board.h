@@ -47,14 +47,26 @@
 #ifndef CONF_BOARD_H
 #define CONF_BOARD_H
 
-/* Configure UART pins */
+/* enable usart0 (wifi) */
 #define CONF_BOARD_UART_CONSOLE
-/* USART0 module is used in serial mode. */
 #define CONF_BOARD_USART_RXD
 #define CONF_BOARD_USART_TXD
-
-/** Usart Hw ID used by the console (UART). */
 #define CONSOLE_UART_ID          ID_UART
+
+
+/* enable usart1 (console)*/ 
+#define CONF_BOARD_USART1_RXD
+#define CONF_BOARD_USART1_TXD
+/* in init.c eingefügt: 
+#ifdef CONF_BOARD_USART1_RXD
+gpio_configure_pin(PIN_USART1_RXD_IDX, PIN_USART1_RXD_FLAGS);
+#endif
+
+#ifdef CONF_BOARD_USART1_TXD
+gpio_configure_pin(PIN_USART1_TXD_IDX, PIN_USART1_TXD_FLAGS);
+#endif
+*/ 
+
 
 /** SPI0 MACRO definition */
 #define CONF_BOARD_SPI0

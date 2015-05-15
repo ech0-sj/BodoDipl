@@ -511,6 +511,7 @@
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\" />
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\GCC\" />
     <Folder Include="src\config\" />
+    <Folder Include="src\Proc_Serial" />
     <Folder Include="src\Usart" />
     <Folder Include="src\Wiznet" />
     <Folder Include="src\SysTimer" />
@@ -566,6 +567,12 @@
     <None Include="src\config\conf_uart_serial.h">
       <SubType>compile</SubType>
     </None>
+    <Compile Include="src\Proc_Serial\Proc_Serial.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Proc_Serial\Proc_Serial.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\SPI\mySPI.c">
       <SubType>compile</SubType>
     </Compile>

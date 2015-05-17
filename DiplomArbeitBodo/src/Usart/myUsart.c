@@ -16,8 +16,10 @@ UsartReceiveBuffer gUsartRecvBuffer[Serport_Count];
 
 void myUSART_Init( Usart* serPort, uint32_t serPortID, IRQn_Type irqtype,  uint32_t baudrate)
 {
+	
 	sam_usart_opt_t usart_console_settings = {
-		baudrate*2,
+		baudrate*2,									// Achtung, Verdoplung Baudrate erforderlich,
+													// damit Voreinstellung Baudrate Empfänger fkt.
 		US_MR_CHRL_8_BIT,
 		US_MR_PAR_NO,
 		US_MR_NBSTOP_1_BIT,

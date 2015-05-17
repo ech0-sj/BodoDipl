@@ -73,7 +73,7 @@ void ProcSerial_InitCmdBuf( SerialCmdBuffer* cmdBuf )
 
 enum status_code ProcSerial_InterpreteRecv( eSerialPort serport, SerialCmdBuffer* cmdBuf, uint8_t readChar )
 {
-	cmdBuf->buffer[cmdBuf->nextWrite] = readChar;
+	cmdBuf->buffer[cmdBuf->nextWrite] = readChar; 
 	cmdBuf->nextWrite += 1;
 	cmdBuf->lastRecv = Get_systime_ms();
 	

@@ -38,6 +38,9 @@
 #include "SPI/mySPI.h"
 #include "Usart/myUsart.h"
 #include "Wiznet/wizchip_conf.h"
+#include "Wiznet/Wiznet_Init.h"
+#include "Wiznet/wizchip_conf.h"
+
 
 #include "Proc_Serial/Proc_Serial.h"
 #include "Schedule/Scheduler.h"
@@ -60,7 +63,13 @@ wiz_NetInfo gWIZNETINFO = {
 	.sn = {255, 255, 255, 0},
 	.gw = {192, 168, 1, 1},
 	.dns = {0, 0, 0, 0},
-.dhcp = NETINFO_STATIC };
+	.dhcp = NETINFO_STATIC };
+
+wiz_NetInfo* GetWiznetInfo()
+{
+	return &gWIZNETINFO;
+}
+
 
 extern uint32_t gDEBUGVAR;
 
@@ -72,28 +81,28 @@ int main (void)
 	
 	ProcessStruct procSerial; 
 	
+// begin initphase	
 	
-	uint8_t usartMsg[100]; 
-	uint32_t usartMsglen; 
 	/* Insert system clock initialization code here (sysclk_init()). */
 	sysclk_init();
 	SysTick_Config(sysclk_get_cpu_hz() / 1000);
 	
 	/* init.c ... Die Pins für MISO, MOSI, CLK, 
-	und USART RX USART TX werden per gpio() eingestellt */ 
+	und USART RX USART TX werden per gpio() eingestellt
+	nutzt die Defines aus conf_board.h */ 
 	board_init();
 	ioport_init();
 	
 	// SPI initialisieren 
 	SPIMaster_Init( spiclock );
-			
+	// W5500_ConfigureResetPin();
+	
 	// Usarts initialisieren
 	USARTWifi_Init( wifiBaudrate );
 	USARTCons_Init( consoleBaudrate );
 	
 	// init Status LEDs 
 	led_config();
-
 
 	// ProzessManager anlegen 
 	Scheduler_Init( );
@@ -102,43 +111,36 @@ int main (void)
 	ProcSerial_Init( &procSerial );
 	Scheduler_Register( &procSerial, ProcSerial ); 
 	
+	// TODO weitere Prozesse hier erstellen 
+	
 	// init fertig -> welcome zeigen 
 	printf( "Bodo Janssen ... arduino due...\n" );
 	printf( "Welcome \n");
 	printf( "init done, start application \n" );
 		
 		
-		
+#if 0
 	// Applikation starten 	
 	Scheduler_Schedule();	
+	return ;
 		
 		
-		return ;
-		
-		
+#else
 		
 	while( 1 )
 	{
 		SwitchOnLED0();
-		Delay_ms( 100 );
-		/*
-		strcpy( usartMsg, "AT+GMR\r\n");
-		usartMsglen = strlen( usartMsg );
 		
-		 USARTWifi_Write( usartMsg, usartMsglen );
-		// usart_putchar( WIFI_USART, 'a');
-		// SetupNetSetting( &gWIZNETINFO ); 
-		// W5500_Init( &gWIZNETINFO ); 
-		// Test_SPI();
+		SetupNetSetting( &gWIZNETINFO ); 
+		W5500_Init( &gWIZNETINFO ); 
 		
-		
-		ProcSerial( &procSerial );
-		*/ 
-		
+		printf( "ip %i.%i.%i.%i \n", 
+			gWIZNETINFO.ip[0], gWIZNETINFO.ip[1], gWIZNETINFO.ip[2],gWIZNETINFO.ip[3] );
 		
 		SwitchOffLED0();
-		Delay_ms( 100 );
+		Delay_ms( 200 );
 	}
+#endif 
 }
 
 

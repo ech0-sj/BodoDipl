@@ -1,7 +1,7 @@
 /*
  * Scheduler.c
- *
- * Created: 06.05.2015 18:13:52
+
+ * Created: 24.04.2015 18:13:52
  *  Author: ech0
  */ 
 
@@ -44,6 +44,7 @@ void Scheduler_Schedule( void )
 	// Nacheinander alle Prozesse durchlaufen 
 	// derzeit werden keine Prioritäten über wacht
 	// aber schon der Zustand 
+	
 	while( 1 )
 	{
 		procStruct =  gScheduleInfo[pid].procStruct;
@@ -58,4 +59,38 @@ void Scheduler_Schedule( void )
 			pid = 0; 
 	}
 }
+
+/*
+void BeispielProzess( ProcessStruct* procStruct )
+{
+	// ich mache irgendetwas 
+	// muss aber mal fertig werden 
+	// damit der nächste auch ran kommt
+	
+	if( HasNewData() )
+	{
+		
+		DoSomethingWithData(); 
+	}
+	
+	finished();
+}
+
+void BeispielProzess_MitZeitschlitz( ProcessStruct* ProcessStruct)
+{
+	bool stopped = false; 
+	
+	while( !stopped )
+	{
+		if( HasNewData() )
+		{
+			DoSomethingWithData(); 
+		}
+		
+		// prozess abbrechen 
+		if( needToStop() )
+			stopped = true; 
+	}
+}
+*/
 

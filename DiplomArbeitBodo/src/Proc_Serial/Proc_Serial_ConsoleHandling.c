@@ -14,7 +14,8 @@ enum status_code ProcSerial_DoConsole( SerialCmdBuffer* cmdbuf )
 	// korrektur: pos steht schon auf nächsem Feld
 	if( cmdbuf->buffer[pos -1] == PROCSER_CONS_ENDBYTE )
 	{
-		USARTCons_Write( cmdbuf->buffer, pos );
+		// USARTCons_Write( cmdbuf->buffer, pos );
+		USARTWifi_Write( cmdbuf->buffer, pos ); 
 		ProcSerial_InitCmdBuf( cmdbuf );
 	}
 	return STATUS_OK;

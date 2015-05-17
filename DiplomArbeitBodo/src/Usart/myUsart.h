@@ -21,7 +21,7 @@
 
 // Den Buffer zeitnah durch einen Ringbuffer tauschen 
 // ansonsten gehts schnell kaputt
-#define USART_RECV_LEN		1024	/* 4k byte groﬂ */ 
+#define USART_RECV_LEN		1024	/* 1k byte groﬂ */ 
 typedef struct  
 {
 	uint32_t bufSize;

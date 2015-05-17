@@ -18,7 +18,7 @@ http://www.avrfreaks.net/forum/need-help-setting-spi-interface-lsb-first-sam3x8e
 #include <asf.h>
 // #include <spi.h>
 
-  #define VERSION_1
+#define VERSION_1
 
 
 #define USED_SPI	SPI0

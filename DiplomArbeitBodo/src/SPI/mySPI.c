@@ -44,37 +44,38 @@ void SPIMaster_Init( eSPIClockConfig clockConfig )
 void SPIMaster_Transfer(void *inOutBuffer, uint32_t size)
 {
 	uint32_t i;
-	
+	uint8_t uc_pcs;
+	static uint16_t data;
+
 	uint8_t *p_buffer;
 
 	p_buffer = inOutBuffer;
 
 	for (i = 0; i < size; i++) {
-		// spi_write(SPI_MASTER_BASE, p_buffer[i], 0, 0);
-		SPIMaster_WriteByte( p_buffer[i]);
+		spi_write(SPI_MASTER_BASE, p_buffer[i], 0, 0);
 		p_buffer[i] = 0xFF;
 		/* Wait transfer done. */
-		// while ((spi_read_status(SPI_MASTER_BASE) & SPI_SR_RDRF) == 0);
-		
-		p_buffer[i] = SPIMaster_ReadByte();
-		// spi_read(SPI_MASTER_BASE, &data, &uc_pcs);
-		// p_buffer[i] = data;
+		while ((spi_read_status(SPI_MASTER_BASE) & SPI_SR_RDRF) == 0);
+		spi_read(SPI_MASTER_BASE, &data, &uc_pcs);
+		p_buffer[i] = data;
 	}
 }
 
 void SPIMaster_WriteByte( uint8_t inBuf )
 {
-	spi_write(SPI_MASTER_BASE, inBuf, 0, 0);
-	while ((spi_read_status(SPI_MASTER_BASE) & SPI_SR_RDRF) == 0);
+	return SPIMaster_Transfer( &inBuf, 1 );
+	//spi_write(SPI_MASTER_BASE, inBuf, 0, 0);
+	// while ((spi_read_status(SPI_MASTER_BASE) & SPI_SR_RDRF) == 0);
 }
 
 uint8_t SPIMaster_ReadByte( void )
 {
+
 	uint8_t readByte;
-	// uint8_t uc_pcs;
-	// spi_read(SPI_MASTER_BASE, &readByte, &uc_pcs);
-	spi_read_single(SPI_MASTER_BASE, &readByte );
+	// spi_read_single(SPI_MASTER_BASE, &readByte );
+	SPIMaster_Transfer( &readByte, 1 ); 
 	return readByte;
+
 }
 
 void SPIMaster_SelectCS( void )

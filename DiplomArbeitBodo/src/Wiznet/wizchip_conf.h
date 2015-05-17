@@ -548,7 +548,4 @@ void wizchip_gettimeout(wiz_NetTimeout* nettime);
 
 typedef enum {Okay,PhyError,InitError} InitResult_t;
 
-InitResult_t W5500_Init(wiz_NetInfo* NetworkConfig);
-
-
 #endif   // _WIZCHIP_CONF_H_

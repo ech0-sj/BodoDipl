@@ -520,6 +520,12 @@
     <Folder Include="src\Wiznet\W5500" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Wiznet\Wiznet_Init.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Wiznet\Wiznet_Init.h">
+      <SubType>compile</SubType>
+    </Compile>
     <None Include="src\ASF\common\services\serial\sam_uart\uart_serial.h">
       <SubType>compile</SubType>
     </None>

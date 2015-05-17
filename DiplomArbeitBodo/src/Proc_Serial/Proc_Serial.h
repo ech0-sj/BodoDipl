@@ -16,7 +16,7 @@
 #define PROCSER_CHAR_TIMEOUT	50		/* wenn 50ms kein Byte kam, angefangene msg verwerfen */ 
 #define PROCSER_CONS_ENDBYTE	0x0A	/* Console endezeichen LF*/
 
-#define CMD_BUF_MAX_LEN		2048
+#define CMD_BUF_MAX_LEN		2048		/* Command buffer länge */ 
 typedef struct  
 {
 	uint64_t lastRecv; 

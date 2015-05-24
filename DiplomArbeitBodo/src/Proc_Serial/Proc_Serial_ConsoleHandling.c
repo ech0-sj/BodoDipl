@@ -5,6 +5,12 @@
  *  Author: ech0
  */ 
 #include "Proc_Serial.h"
+#include "string.h"
+#include "Wiznet/Wiznet_Init.h"
+#include "../Tools/Tools.h"
+
+void HandleOwnSerialProtocol( uint8_t* buffer, uint32_t len );
+
 
 
 enum status_code ProcSerial_DoConsole( SerialCmdBuffer* cmdbuf )
@@ -14,11 +20,67 @@ enum status_code ProcSerial_DoConsole( SerialCmdBuffer* cmdbuf )
 	// korrektur: pos steht schon auf nächsem Feld
 	if( cmdbuf->buffer[pos -1] == PROCSER_CONS_ENDBYTE )
 	{
-	
+		// verarbeiten 
+		HandleOwnSerialProtocol( cmdbuf->buffer, cmdbuf->nextWrite-1 );
 		
-		// USARTCons_Write( cmdbuf->buffer, pos );
-		USARTWifi_Write( cmdbuf->buffer, pos ); 
+		// commandbuffer leeren 
 		ProcSerial_InitCmdBuf( cmdbuf );
 	}
 	return STATUS_OK;
+}
+
+
+
+
+void HandleOwnSerialProtocol( uint8_t* buffer, uint32_t len )
+{
+	uint32_t idx = 0;
+	
+	// aus dem letzten Zeichen eine bin 0 machen ( string ende ) 
+	buffer[len] = '\0';
+	
+	// Befehle prüfen, mindest länge 3byte
+	if( len <= 4 )
+	return;
+	
+	// help 
+	if( strstr(buffer, "help") )
+	{
+		printf( "HELP - command \n");
+		printf( "Set LAN IP:	set lan 192.168.x.y\n" );
+		printf( "Get LAN IP:	get lan\n" );
+		
+		return;
+	}
+	// set lan 
+	else if( strstr(buffer, "set lan ") )
+	{
+		wiz_NetInfo* netinfo = GetWiznetInfo();
+		uint8_t ipArray[4];
+		
+		idx = 8; 
+		if( !ParseIpToArray( &buffer[idx], &ipArray) )
+		{
+			memcpy( netinfo->ip, ipArray, 4 ); 
+			W5500_Init( netinfo ); 
+			printf( "set lan OK\n");
+		}
+		else 
+		{
+			printf( "set lan NOK\n");
+		}
+		
+		return; 
+	}
+	else if( strstr(buffer, "get lan") )
+	{
+		wiz_NetInfo* netinfo = GetWiznetInfo();
+		
+		printf( "get lan IP: %i.%i.%i.%i \n", netinfo->ip[0], netinfo->ip[1], netinfo->ip[2], netinfo->ip[3] );
+		return;
+	}
+	
+	
+	printf( "unknown command \n");
+	return;
 }

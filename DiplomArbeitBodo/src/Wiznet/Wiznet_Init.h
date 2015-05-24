@@ -21,4 +21,7 @@ InitResult_t W5500_Init(wiz_NetInfo* NetworkConfig);
 void W5500_ResetHW(void);
 void W5500_ConfigureIOPins( void );
 
+void SetupNetSetting( wiz_NetInfo* wiznetInfo );
+wiz_NetInfo* GetWiznetInfo();
+
 #endif /* WIZNET_INIT_H_ */

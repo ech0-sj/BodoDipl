@@ -9,6 +9,53 @@
 
 
 
+wiz_NetInfo gWIZNETINFO = {
+	.mac = {0x00, 0x08, 0xdc, 0xab, 0xcd, 0xef},
+	.ip = {192, 168, 1, 12},
+	.sn = {255, 255, 255, 0},
+	.gw = {192, 168, 1, 1},
+	.dns = {0, 0, 0, 0},
+.dhcp = NETINFO_STATIC };
+
+
+wiz_NetInfo* GetWiznetInfo()
+{
+	return &gWIZNETINFO;
+}
+
+
+void SetupNetSetting( wiz_NetInfo* wiznetInfo )
+{
+	wiznetInfo->mac[0] = 0x00;
+	wiznetInfo->mac[1] = 0x08;
+	wiznetInfo->mac[2] = 0xdc;
+	wiznetInfo->mac[3] = 0xdc;
+	wiznetInfo->mac[4] = 0xef;
+	
+	wiznetInfo->ip[0] = 192;
+	wiznetInfo->ip[1] = 168;
+	wiznetInfo->ip[2] = 1;
+	wiznetInfo->ip[3] = 111;
+	
+	wiznetInfo->sn[0] = 255;
+	wiznetInfo->sn[1] = 255;
+	wiznetInfo->sn[2] = 255;
+	wiznetInfo->sn[3] = 0;
+	
+	wiznetInfo->gw[0] = 192;
+	wiznetInfo->gw[1] = 168;
+	wiznetInfo->gw[2] = 1;
+	wiznetInfo->gw[3] = 1;
+	
+	wiznetInfo->dns[0] = 0;
+	wiznetInfo->dns[1] = 0;
+	wiznetInfo->dns[2] = 0;
+	wiznetInfo->dns[3] = 0;
+	wiznetInfo->dhcp = NETINFO_STATIC;
+}
+
+
+
 void W5500_ConfigureIOPins( void )
 {
 	ioport_set_pin_dir(	W5500_RESET_PIN, IOPORT_DIR_OUTPUT );

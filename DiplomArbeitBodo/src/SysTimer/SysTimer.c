@@ -6,6 +6,7 @@
  */ 
 #include "asf.h"
 #include "SysTimer.h"
+#include "../HTTPserver/httpServer.h"
 
 /* Systick Counter */
 static volatile uint64_t g_ul_ms_ticks = 0U;
@@ -14,6 +15,11 @@ void SysTick_Handler(void)
 {
 	/* Increment counter necessary in delay(). */
 	g_ul_ms_ticks++;
+	
+	// sekundenzähler HTTP
+	if( !(g_ul_ms_ticks % 1000 ) )
+		httpServer_time_handler();
+	
 }
 
 

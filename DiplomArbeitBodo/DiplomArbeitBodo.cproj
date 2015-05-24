@@ -511,6 +511,9 @@
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\" />
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\GCC\" />
     <Folder Include="src\config\" />
+    <Folder Include="src\HTTPserver" />
+    <Folder Include="src\Proc_Wiznet" />
+    <Folder Include="src\Tools" />
     <Folder Include="src\Schedule" />
     <Folder Include="src\Proc_Serial" />
     <Folder Include="src\Usart" />
@@ -520,6 +523,45 @@
     <Folder Include="src\Wiznet\W5500" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\HTTPserver\html_pages.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTPserver\html_pages.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTPserver\httpParser.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTPserver\httpParser.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTPserver\httpServer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTPserver\httpServer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTPserver\httpUtil.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTPserver\httpUtil.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\LED.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Proc_Wiznet\Proc_Wiznet.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Proc_Wiznet\Proc_Wiznet.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Tools\Tools.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Tools\Tools.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\Wiznet\Wiznet_Init.c">
       <SubType>compile</SubType>
     </Compile>

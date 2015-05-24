@@ -17,6 +17,7 @@ typedef enum
 	PID_Start = PID_Unknown,
 	PID_Debug,
 	PID_Serial,
+	PID_Wiznet,
 	// add here
 	
 	PID_Count

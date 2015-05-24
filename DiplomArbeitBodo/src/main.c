@@ -34,52 +34,40 @@
 #include "conf_board.h"
 #include "conf_clock.h"
 
+#include "LED.h"
 #include "Systimer/Systimer.h"
-#include "SPI/mySPI.h"
 #include "Usart/myUsart.h"
+
+#include "SPI/mySPI.h"
 #include "Wiznet/wizchip_conf.h"
 #include "Wiznet/Wiznet_Init.h"
 #include "Wiznet/wizchip_conf.h"
 
-
-#include "Proc_Serial/Proc_Serial.h"
 #include "Schedule/Scheduler.h"
+#include "Proc_Serial/Proc_Serial.h"
+#include "Proc_Wiznet/Proc_Wiznet.h"
+
+#include "HTTPserver/httpServer.h"
+#include "HTTPserver/html_pages.h"
 
 
-void Test_SPI( void );
-void SetupNetSetting( wiz_NetInfo* wiznetInfo );
-__INLINE void SwitchOnLED0( void );
-__INLINE void SwitchOffLED0( void );
-__INLINE static void led_config(void);
-
-
-#define LED0_PIO		PIOB
-#define LED0_MASK		(0x01 << 27)
-
-
-wiz_NetInfo gWIZNETINFO = {
-	.mac = {0x00, 0x08, 0xdc, 0xab, 0xcd, 0xef},
-	.ip = {192, 168, 1, 12},
-	.sn = {255, 255, 255, 0},
-	.gw = {192, 168, 1, 1},
-	.dns = {0, 0, 0, 0},
-	.dhcp = NETINFO_STATIC };
-
-wiz_NetInfo* GetWiznetInfo()
-{
-	return &gWIZNETINFO;
-}
-
+uint8_t* gHttpRxBuffer[DATA_BUF_SIZE];
+uint8_t* gHttpTxBuffer[DATA_BUF_SIZE];
+uint8_t socklist[NUM_OF_WIZNET_SOCKETS];
+extern HTMLPageDef gIndexHTML;
 
 
 
 int main (void)
 {
+	wiz_NetInfo* pNetInfo = GetWiznetInfo();
 	uint32_t consoleBaudrate = CONS_USART_BAUD;
 	uint32_t wifiBaudrate = WIFI_USART_BAUD;
 	eSPIClockConfig spiclock = SPICLK_1MHz;
 	
 	ProcessStruct procSerial; 
+	ProcessStruct procWiznet;
+	
 	netmode_type netMode; 
 	uint32_t netModeAsint;
 	
@@ -100,8 +88,13 @@ int main (void)
 	
 	// Wiznet mit default werten belegen
 	W5500_ConfigureIOPins();
-	SetupNetSetting( &gWIZNETINFO );
-	W5500_Init( &gWIZNETINFO );
+	SetupNetSetting( &pNetInfo );
+	W5500_Init( &pNetInfo );
+	
+	// HTTP servefr einrichten 
+	// und die index.html Seite anlegen 
+	httpServer_init( gHttpTxBuffer, gHttpRxBuffer, NUM_OF_WIZNET_SOCKETS, socklist );
+	reg_httpServer_webContent( gIndexHTML.PageName, gIndexHTML.PageContent );
 	
 	// Usarts initialisieren
 	USARTWifi_Init( wifiBaudrate );
@@ -111,14 +104,22 @@ int main (void)
 	// init Status LEDs 
 	led_config();
 
+
+
 	// ProzessManager anlegen 
 	Scheduler_Init( );
 
+	// Wiznez Process -> Kommunikation direkt mit dem Chip 
+	ProcWiznet_Init( &procWiznet ); 
+	Scheduler_Register( &procWiznet, ProcWiznet ); 
+	
 	// den seriellen Empf. Prozess anlegen 
 	ProcSerial_Init( &procSerial );
 	Scheduler_Register( &procSerial, ProcSerial ); 
 	
+	
 	// TODO weitere Prozesse hier erstellen 
+	
 	
 	// init fertig -> welcome zeigen 
 	printf( "Bodo Janssen ... arduino due...\n" );
@@ -129,6 +130,7 @@ int main (void)
 #if 1
 	// Applikation starten 	
 	Scheduler_Schedule();	
+	
 	return ;
 		
 		
@@ -152,67 +154,4 @@ int main (void)
 }
 
 
-void Test_SPI( void )
-{	
-	uint8_t buffer[100];
-	uint32_t buflen = 100; 
-	volatile uint32_t i; 
-	
-	for( i = 0; i < buflen; i++ )
-	{
-		buffer[i] = i; 
-	}
-	
-	SPIMaster_Transfer( buffer, buflen ); 
-	
-}
 
-
-__INLINE static void led_config(void)
-{
-	/* Set up LED pins. */
-	LED0_PIO->PIO_PER = LED0_MASK;
-	LED0_PIO->PIO_OER = LED0_MASK;
-	LED0_PIO->PIO_PUDR = LED0_MASK;
-}
-
-__INLINE void SwitchOnLED0( void )
-{
-	LED0_PIO->PIO_SODR = LED0_MASK;
-}
-
-__INLINE void SwitchOffLED0( void )
-{
-	LED0_PIO->PIO_CODR = LED0_MASK;
-}
-
-
-void SetupNetSetting( wiz_NetInfo* wiznetInfo )
-{
-	wiznetInfo->mac[0] = 0x00;
-	wiznetInfo->mac[1] = 0x08;
-	wiznetInfo->mac[2] = 0xdc;
-	wiznetInfo->mac[3] = 0xdc;
-	wiznetInfo->mac[4] = 0xef;
-	
-	wiznetInfo->ip[0] = 192;
-	wiznetInfo->ip[1] = 168;
-	wiznetInfo->ip[2] = 1;
-	wiznetInfo->ip[3] = 111;
-	
-	wiznetInfo->sn[0] = 255;
-	wiznetInfo->sn[1] = 255;
-	wiznetInfo->sn[2] = 255;
-	wiznetInfo->sn[3] = 0;
-	
-	wiznetInfo->gw[0] = 192;
-	wiznetInfo->gw[1] = 168;
-	wiznetInfo->gw[2] = 1;
-	wiznetInfo->gw[3] = 1;
-	
-	wiznetInfo->dns[0] = 0;
-	wiznetInfo->dns[1] = 0;
-	wiznetInfo->dns[2] = 0;
-	wiznetInfo->dns[3] = 0;
-	wiznetInfo->dhcp = NETINFO_STATIC;
-}

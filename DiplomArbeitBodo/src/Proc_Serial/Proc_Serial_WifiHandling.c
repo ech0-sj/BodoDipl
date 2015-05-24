@@ -12,6 +12,16 @@ enum status_code ProcSerial_DoWifi( SerialCmdBuffer* cmdbuf )
 {
 	uint32_t pos = cmdbuf->nextWrite;
 	
+	
+	// Das AT Protokoll des ESP auswerten
+	
+	// TCP Nachrichten gehen an den Ethernet Process
+	
+	// Steuerbefehle, sollen falls möglich hier verarbeitet
+	// werden, Bei Bedarf wird ein ESP-Control-Process erzeugt
+	
+	
+	
 	// korrektur: pos steht schon auf nächsem Feld
 	if( cmdbuf->buffer[pos -1] == PROCSER_CONS_ENDBYTE )
 	{

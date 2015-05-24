@@ -71,15 +71,17 @@ wiz_NetInfo* GetWiznetInfo()
 }
 
 
-extern uint32_t gDEBUGVAR;
+
 
 int main (void)
 {
 	uint32_t consoleBaudrate = CONS_USART_BAUD;
 	uint32_t wifiBaudrate = WIFI_USART_BAUD;
-	eSPIClockConfig spiclock = SPICLK_500kHz;
+	eSPIClockConfig spiclock = SPICLK_1MHz;
 	
 	ProcessStruct procSerial; 
+	netmode_type netMode; 
+	uint32_t netModeAsint;
 	
 // begin initphase	
 	
@@ -95,11 +97,16 @@ int main (void)
 	
 	// SPI initialisieren 
 	SPIMaster_Init( spiclock );
-	// W5500_ConfigureResetPin();
+	
+	// Wiznet mit default werten belegen
+	W5500_ConfigureIOPins();
+	SetupNetSetting( &gWIZNETINFO );
+	W5500_Init( &gWIZNETINFO );
 	
 	// Usarts initialisieren
 	USARTWifi_Init( wifiBaudrate );
 	USARTCons_Init( consoleBaudrate );
+	
 	
 	// init Status LEDs 
 	led_config();
@@ -119,7 +126,7 @@ int main (void)
 	printf( "init done, start application \n" );
 		
 		
-#if 0
+#if 1
 	// Applikation starten 	
 	Scheduler_Schedule();	
 	return ;
@@ -130,15 +137,16 @@ int main (void)
 	while( 1 )
 	{
 		SwitchOnLED0();
-		
+
 		SetupNetSetting( &gWIZNETINFO ); 
-		W5500_Init( &gWIZNETINFO ); 
+		W5500_Init( &gWIZNETINFO );
+		
 		
 		printf( "ip %i.%i.%i.%i \n", 
 			gWIZNETINFO.ip[0], gWIZNETINFO.ip[1], gWIZNETINFO.ip[2],gWIZNETINFO.ip[3] );
 		
 		SwitchOffLED0();
-		Delay_ms( 200 );
+		Delay_ms( 5000 );
 	}
 #endif 
 }
@@ -190,7 +198,7 @@ void SetupNetSetting( wiz_NetInfo* wiznetInfo )
 	wiznetInfo->ip[0] = 192;
 	wiznetInfo->ip[1] = 168;
 	wiznetInfo->ip[2] = 1;
-	wiznetInfo->ip[3] = 12;
+	wiznetInfo->ip[3] = 111;
 	
 	wiznetInfo->sn[0] = 255;
 	wiznetInfo->sn[1] = 255;

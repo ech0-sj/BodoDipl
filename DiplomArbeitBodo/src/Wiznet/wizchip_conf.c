@@ -77,13 +77,13 @@ void 	  wizchip_cris_exit(void)          {}
  * @note This function help not to access wrong address. If you do not describe this function or register any functions,
  * null function is called.
  */
-void 	wizchip_cs_select(void)            { }
+void 	wizchip_cs_select(void)            { SPIMaster_SelectCS(); }
 /**
  * @brief Default function to deselect chip.
  * @note This function help not to access wrong address. If you do not describe this function or register any functions,
  * null function is called.
  */
-void 	wizchip_cs_deselect(void)          { }
+void 	wizchip_cs_deselect(void)          { SPIMaster_DeselectCS(); }
 /**
  * @brief Default function to read in direct or indirect interface.
  * @note This function help not to access wrong address. If you do not describe this function or register any functions,

@@ -9,19 +9,23 @@
 
 
 
-void W5500_ConfigureResetPin( void )
+void W5500_ConfigureIOPins( void )
 {
-	// gpio_configure_pin( W5500_RESET_PIO, W5500_RESET_MASK );
-	// gpio_configure_pin( PIO_PA2_IDX, PIO_TYPE_PIO_OUTPUT_1 | PIO_DEFAULT );
+	ioport_set_pin_dir(	W5500_RESET_PIN, IOPORT_DIR_OUTPUT );
+	ioport_set_pin_level(W5500_RESET_PIN, IOPORT_PIN_LEVEL_HIGH );
+	
+	ioport_set_pin_dir(	W5500_CS_PIN, IOPORT_DIR_OUTPUT );
+	ioport_set_pin_level(W5500_CS_PIN, IOPORT_PIN_LEVEL_HIGH );
+	
 }
 
 void W5500_ResetHW(void)
 {
-	//ioport_set_port_level( W5500_RESET_PORT, W5500_RESET_PIN, IOPORT_PIN_LEVEL_LOW );
-	// ioport_set_port_level( IOPORT_PIOA, PIO_PA2, IOPORT_PIN_LEVEL_LOW );
-	// Delay_ms( 3 );
-	// ioport_set_port_level( W5500_RESET_PORT, W5500_RESET_PIN, IOPORT_PIN_LEVEL_HIGH );
-	// ioport_set_port_level( IOPORT_PIOA, PIO_PA2, IOPORT_PIN_LEVEL_HIGH );
+	ioport_set_pin_level(W5500_RESET_PIN, IOPORT_PIN_LEVEL_LOW );
+	ioport_set_pin_level(W5500_CS_PIN, IOPORT_PIN_LEVEL_LOW );
+	Delay_ms( 3 ); 
+	ioport_set_pin_level(W5500_RESET_PIN, IOPORT_PIN_LEVEL_HIGH );
+	ioport_set_pin_level(W5500_CS_PIN, IOPORT_PIN_LEVEL_HIGH );
 }
 
 
@@ -59,6 +63,8 @@ InitResult_t W5500_Init(wiz_NetInfo* NetworkConfig)
 	////////////////////////////////////////////////////////////////////////
 
 	
+	W5500_ResetHW();
+	
 	/* WIZCHIP SOCKET Buffer initialize */
 	if(ctlwizchip(CW_INIT_WIZCHIP,(void*)memsize) == -1)
 	{
@@ -73,8 +79,12 @@ InitResult_t W5500_Init(wiz_NetInfo* NetworkConfig)
 	
 	//This is wehre the "Black Magic" happens
 	//
+	
 	ctlnetwork(CN_SET_NETINFO,NetworkConfig);	//Write Config in Chip
+	
 	ctlnetwork(CN_GET_NETINFO,NetworkConfig);	//Read Config Back
+	
+	
 	return Okay;								//Return Okay
 	//Black Magic done :-), as you given a pointer to your Network-Config, you'll get the current config back from the chip
 }

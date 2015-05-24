@@ -72,10 +72,13 @@ gpio_configure_pin(PIN_USART1_TXD_IDX, PIN_USART1_TXD_FLAGS);
 #define CONF_BOARD_SPI0
 
 /** SPI0 slave select0 MACRO definition, sollte PA28 sein */
-#define CONF_BOARD_SPI0_NPCS0
+#define CONF_BOARD_SPI0_NPCS1
 
 /** Spi Hw ID . */
 // #define SPI_ID          ID_SPI0
 
+
+#define W5500_RESET_PIN		IOPORT_CREATE_PIN( PIOA, 2)	/* Pin A2 als reset Pin festlegen  */ 
+#define W5500_CS_PIN		IOPORT_CREATE_PIN( PIOA, 28)
 
 #endif // CONF_BOARD_H

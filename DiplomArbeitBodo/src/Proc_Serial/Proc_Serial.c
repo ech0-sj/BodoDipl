@@ -77,6 +77,8 @@ enum status_code ProcSerial_InterpreteRecv( eSerialPort serport, SerialCmdBuffer
 	cmdBuf->nextWrite += 1;
 	cmdBuf->lastRecv = Get_systime_ms();
 	
+	// Auf den jeweiligen Schnittstellen sind 
+	// die Protokolle fix. Es muss nichts geprüft werden
 	switch( serport )
 	{
 		case Serport_Console:

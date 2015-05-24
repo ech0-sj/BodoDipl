@@ -9,7 +9,8 @@
 #ifndef WIZNET_INIT_H_
 #define WIZNET_INIT_H_
 
-
+#include "asf.h"
+#include "../config/conf_board.h"
 #include "wizchip_conf.h"
 #include "../SPI/myspi.h"
 #include "../config/conf_spi_master.h"
@@ -18,6 +19,6 @@
 
 InitResult_t W5500_Init(wiz_NetInfo* NetworkConfig);
 void W5500_ResetHW(void);
-void W5500_ConfigureResetPin( void );
+void W5500_ConfigureIOPins( void );
 
 #endif /* WIZNET_INIT_H_ */

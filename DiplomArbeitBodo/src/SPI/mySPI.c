@@ -71,7 +71,7 @@ void SPIMaster_WriteByte( uint8_t inBuf )
 uint8_t SPIMaster_ReadByte( void )
 {
 
-	uint8_t readByte;
+	uint8_t readByte = 0x00;
 	// spi_read_single(SPI_MASTER_BASE, &readByte );
 	SPIMaster_Transfer( &readByte, 1 ); 
 	return readByte;
@@ -80,12 +80,12 @@ uint8_t SPIMaster_ReadByte( void )
 
 void SPIMaster_SelectCS( void )
 {
-	ioport_set_port_level( IOPORT_PIOD, PIO_PD10, IOPORT_PIN_LEVEL_LOW );
+	ioport_set_pin_level(W5500_CS_PIN, IOPORT_PIN_LEVEL_LOW );
 }
 
 void SPIMaster_DeselectCS( void )
 {
-	ioport_set_port_level( IOPORT_PIOD, PIO_PD10, IOPORT_PIN_LEVEL_LOW );
+	ioport_set_pin_level(W5500_CS_PIN, IOPORT_PIN_LEVEL_HIGH );
 }
 
 
@@ -145,12 +145,14 @@ uint8_t SPIMaster_ReadByte( void )
 
 void SPIMaster_SelectCS( void )
 {
-	ioport_set_port_level( IOPORT_PIOD, PIO_PD10, IOPORT_PIN_LEVEL_LOW );
+	volatile int i = 0; 
+	ioport_set_port_level( W5500_CS_PIN, IOPORT_PIN_LEVEL_LOW );
 }
 
 void SPIMaster_DeselectCS( void )
 {
-	ioport_set_port_level( IOPORT_PIOD, PIO_PD10, IOPORT_PIN_LEVEL_LOW );
+	volatile int i = 0; 
+	ioport_set_port_level( W5500_CS_PIN, IOPORT_PIN_LEVEL_HIGH );
 }
  
  #endif 

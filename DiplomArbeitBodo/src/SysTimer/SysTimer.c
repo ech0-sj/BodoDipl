@@ -7,9 +7,13 @@
 #include "asf.h"
 #include "SysTimer.h"
 #include "../HTTPserver/httpServer.h"
+#include "../DualportRAM/Dualportram_Storage.h"
+#include "../HTTPserver/html_pages.h"
 
 /* Systick Counter */
 static volatile uint64_t g_ul_ms_ticks = 0U;
+
+void Systime_Second_Timer();
 
 void SysTick_Handler(void)
 {
@@ -18,8 +22,7 @@ void SysTick_Handler(void)
 	
 	// sekundenzähler HTTP
 	if( !(g_ul_ms_ticks % 1000 ) )
-		httpServer_time_handler();
-	
+		Systime_Second_Timer();
 }
 
 
@@ -37,6 +40,19 @@ __inline void Delay_ms(uint32_t delayInMs)
 
 	ul_cur_ticks = Get_systime_ms();
 	while ((Get_systime_ms() - ul_cur_ticks) < delayInMs) {
+	}
+}
+
+
+// Wird jede Seunde gerufen 
+void Systime_Second_Timer()
+{
+	httpServer_time_handler();
+	
+	if( !(g_ul_ms_ticks % 10000) )
+	{
+		DualPortRAM_UpdateDebug();
+		HTMLPages_UpdateDataPage();
 	}
 }
 

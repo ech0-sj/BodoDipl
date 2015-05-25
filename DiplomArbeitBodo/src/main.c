@@ -55,7 +55,7 @@ uint8_t* gHttpRxBuffer[DATA_BUF_SIZE];
 uint8_t* gHttpTxBuffer[DATA_BUF_SIZE];
 uint8_t socklist[NUM_OF_WIZNET_SOCKETS];
 extern HTMLPageDef gIndexHTML;
-
+extern HTMLPageDef gDataHTML;
 
 
 int main (void)
@@ -96,6 +96,11 @@ int main (void)
 	httpServer_init( gHttpTxBuffer, gHttpRxBuffer, NUM_OF_WIZNET_SOCKETS, socklist );
 	reg_httpServer_webContent( gIndexHTML.PageName, gIndexHTML.PageContent );
 	
+	HTMLPages_InitDataPage();
+	HTMLPages_UpdateDataPage();
+	reg_httpServer_webContent( gDataHTML.PageName, gDataHTML.PageContent );
+	
+	
 	// Usarts initialisieren
 	USARTWifi_Init( wifiBaudrate );
 	USARTCons_Init( consoleBaudrate );
@@ -103,8 +108,6 @@ int main (void)
 	
 	// init Status LEDs 
 	led_config();
-
-
 
 	// ProzessManager anlegen 
 	Scheduler_Init( );
@@ -125,32 +128,11 @@ int main (void)
 	printf( "Bodo Janssen ... arduino due...\n" );
 	printf( "Welcome \n");
 	printf( "init done, start application \n" );
-		
-		
-#if 1
+	
 	// Applikation starten 	
 	Scheduler_Schedule();	
 	
-	return ;
-		
-		
-#else
-		
-	while( 1 )
-	{
-		SwitchOnLED0();
-
-		SetupNetSetting( &gWIZNETINFO ); 
-		W5500_Init( &gWIZNETINFO );
-		
-		
-		printf( "ip %i.%i.%i.%i \n", 
-			gWIZNETINFO.ip[0], gWIZNETINFO.ip[1], gWIZNETINFO.ip[2],gWIZNETINFO.ip[3] );
-		
-		SwitchOffLED0();
-		Delay_ms( 5000 );
-	}
-#endif 
+	return;
 }
 
 

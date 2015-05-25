@@ -66,15 +66,22 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 			// Verbindung gerade augebaut
 			if(getSn_IR(sn) & Sn_IR_CON)	// Socket n interrupt register mask; TCP CON interrupt = connection with peer is successful
 			{
-				printf( "%d connection established \n", sn );
+				// printf( "%d connection established \n", sn );
 				setSn_IR(sn, Sn_IR_CON);  // this interrupt should be write the bit cleared to '1'
 			}
 			
 			// Abhängig vom Socket HTTP verearbeitung 
 			// oder eigene Verarbeitung 
-			if( getSn_PORT(sn) == WIZNET_HTTP_PORT ) 
+			switch( getSn_PORT(sn) ) 
 			{
-				HttpServer_ProcessRequest( sn );
+				case WIZNET_HTTP_PORT:
+					HttpServer_ProcessRequest( sn );
+				break; 
+				
+				// weitere Protokolle hier 
+				
+				default: 
+				break; 
 			}
 			
 		}break;
@@ -84,7 +91,7 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 		{	
 			if((ret=disconnect(sn)) != SOCK_OK) return ret;
 		
-			printf("%d:Socket Closed\r\n", sn);
+			printf("log %d:Socket Closed\r\n", sn);
 			
 		}break;
 
@@ -94,7 +101,7 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 		{
 			if( (ret = listen(sn)) != SOCK_OK) return ret;
 			
-			printf("%d: Listening on port %d \n", sn, getSn_PORT( sn ) );
+			printf("log %d: Listening on port %d \n", sn, getSn_PORT( sn ) );
 			
 		}break;
 
@@ -103,17 +110,18 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 		{
 			uint16_t port; 
 			
-			// den port festlegen 
-			/*
-			if( sn < (NUM_OF_WIZNET_SOCKETS /2) )
-				port = WIZNET_CUSTOM_PORT; 
-			else 
+			if( sn < WIZNET_HTTP_SOCKET_COUNT )
+			{
 				port = WIZNET_HTTP_PORT;
-			*/ 
-			port = WIZNET_HTTP_PORT;
+			}
+			else 
+			{
+				port = WIZNET_CUSTOM_PORT;
+			}
+			
 			close(sn);
 			if((ret=socket(sn, Sn_MR_TCP, port, 0x00)) != sn) return ret; 
-			printf( "%d socket started \n", sn );
+			printf( "log %d socket started \n", sn );
 			
 		}break;
 		

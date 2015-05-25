@@ -18,11 +18,12 @@
 #define NUM_OF_WIZNET_SOCKETS	_WIZCHIP_SOCK_NUM_
 #define NUM_OF_WIZ_TCP_SOCKETS	(NUM_OF_WIZNET_SOCKETS -1)
 
-#define WIZNET_HTTP_PORT		80
-#define WIZNET_CUSTOM_PORT		1234
 
+#define WIZNET_HTTP_SOCKET_COUNT	3				// die ersten 3 Sockets sollen für HTTP festgelegt werden
+#define WIZNET_HTTP_PORT			80				// Port für HTTP 
+#define WIZNET_CUSTOM_PORT			1234			// Port für eigene Protokolle 
 
-#define DATA_BUF_SIZE	2048
+#define DATA_BUF_SIZE				2048			// Buffer size 
 
 
 typedef struct  

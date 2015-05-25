@@ -567,7 +567,7 @@ static void http_process_handler(uint8_t s, st_http_request * p_http_request)
 
 			if(p_http_request->TYPE == PTYPE_CGI)
 			{
-				// content_found = http_get_cgi_handler(uri_name, pHTTP_TX, &file_len);
+				content_found = http_get_cgi_handler(uri_name, pHTTP_TX, &file_len);
 				if(content_found && (file_len <= (DATA_BUF_SIZE-(strlen(RES_CGIHEAD_OK)+8))))
 				{
 					send_http_response_cgi(s, http_response, pHTTP_TX, (uint16_t)file_len);
@@ -657,7 +657,7 @@ static void http_process_handler(uint8_t s, st_http_request * p_http_request)
 
 			if(p_http_request->TYPE == PTYPE_CGI)	// HTTP POST Method; CGI Process
 			{
-				// content_found = http_post_cgi_handler(uri_name, p_http_request, http_response, &file_len);
+				content_found = http_post_cgi_handler(uri_name, p_http_request, http_response, &file_len);
 #ifdef _HTTPSERVER_DEBUG_
 				printf("> HTTPSocket[%d] : [CGI: %s] / Response len [ %ld ]byte\r\n", s, content_found?"Content found":"Content not found", file_len);
 #endif

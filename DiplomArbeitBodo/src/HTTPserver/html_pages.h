@@ -16,5 +16,7 @@ typedef struct
 }HTMLPageDef;
 
 
+void HTMLPages_InitDataPage();
+void HTMLPages_UpdateDataPage();
 
 #endif /* HTML_PAGES_H_ */

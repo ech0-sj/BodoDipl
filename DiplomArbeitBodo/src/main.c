@@ -51,8 +51,8 @@
 #include "HTTPserver/html_pages.h"
 
 
-uint8_t* gHttpRxBuffer[DATA_BUF_SIZE];
-uint8_t* gHttpTxBuffer[DATA_BUF_SIZE];
+uint8_t gHttpRxBuffer[DATA_BUF_SIZE];
+uint8_t gHttpTxBuffer[DATA_BUF_SIZE];
 uint8_t socklist[NUM_OF_WIZNET_SOCKETS];
 extern HTMLPageDef gIndexHTML;
 extern HTMLPageDef gDataHTML;
@@ -60,7 +60,7 @@ extern HTMLPageDef gDataHTML;
 
 int main (void)
 {
-	wiz_NetInfo* pNetInfo = GetWiznetInfo();
+	// wiz_NetInfo* pNetInfo = GetWiznetInfo();
 	uint32_t consoleBaudrate = CONS_USART_BAUD;
 	uint32_t wifiBaudrate = WIFI_USART_BAUD;
 	eSPIClockConfig spiclock = SPICLK_1MHz;
@@ -70,6 +70,8 @@ int main (void)
 	
 	netmode_type netMode; 
 	uint32_t netModeAsint;
+	
+	HTMLPageDef* htmlpagePtr;
 	
 // begin initphase	
 	
@@ -88,17 +90,24 @@ int main (void)
 	
 	// Wiznet mit default werten belegen
 	W5500_ConfigureIOPins();
-	SetupNetSetting( &pNetInfo );
-	W5500_Init( &pNetInfo );
+	W5500_Init(  );
 	
 	// HTTP servefr einrichten 
 	// und die index.html Seite anlegen 
 	httpServer_init( gHttpTxBuffer, gHttpRxBuffer, NUM_OF_WIZNET_SOCKETS, socklist );
-	reg_httpServer_webContent( gIndexHTML.PageName, gIndexHTML.PageContent );
 	
-	HTMLPages_InitDataPage();
-	HTMLPages_UpdateDataPage();
-	reg_httpServer_webContent( gDataHTML.PageName, gDataHTML.PageContent );
+	HTMLPagesCreate_index();
+	htmlpagePtr = HTMLPagesGet_index();
+	reg_httpServer_webContent( htmlpagePtr->PageName, htmlpagePtr->PageContent );
+	
+	HTMLPagesCreate_data();
+	htmlpagePtr = HTMLPagesGet_data();
+	reg_httpServer_webContent( htmlpagePtr->PageName, htmlpagePtr->PageContent );
+	
+	
+	HTMLPagesCreate_setting();
+	htmlpagePtr = HTMLPagesGet_setting();
+	reg_httpServer_webContent( htmlpagePtr->PageName, htmlpagePtr->PageContent );
 	
 	
 	// Usarts initialisieren

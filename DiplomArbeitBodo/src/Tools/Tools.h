@@ -13,5 +13,6 @@
 
 uint32_t ParseIpToArray( char* ipAstring, uint8_t** ipArray );
 
+char *strwrd(char *s, char *buf, size_t len, char *delim);
 
 #endif /* TOOLS_H_ */

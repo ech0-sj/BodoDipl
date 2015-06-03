@@ -17,7 +17,7 @@
 #include "../SysTimer/SysTimer.h"
 
 
-InitResult_t W5500_Init(wiz_NetInfo* NetworkConfig);
+InitResult_t W5500_Init( void );
 void W5500_ResetHW(void);
 void W5500_ConfigureIOPins( void );
 

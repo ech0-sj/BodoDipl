@@ -79,6 +79,9 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 				break; 
 				
 				// weitere Protokolle hier 
+				case WIZNET_CUSTOM_PORT:
+					DoSimpleTelnet( sn );
+				break; 
 				
 				default: 
 				break; 

@@ -8,6 +8,7 @@
 #include "string.h"
 #include "Wiznet/Wiznet_Init.h"
 #include "../Tools/Tools.h"
+#include "../Persistent/PersistentItems.h"
 
 void HandleOwnSerialProtocol( uint8_t* buffer, uint32_t len );
 
@@ -61,8 +62,8 @@ void HandleOwnSerialProtocol( uint8_t* buffer, uint32_t len )
 		idx = 8; 
 		if( !ParseIpToArray( &buffer[idx], &ipArray) )
 		{
-			memcpy( netinfo->ip, ipArray, 4 ); 
-			W5500_Init( netinfo ); 
+			SaveIPWiznet( ipArray );
+			W5500_Init(  ); 
 			printf( "set lan OK\n");
 		}
 		else 

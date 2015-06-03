@@ -15,10 +15,12 @@
 #define DUALPORT_RAM_BUFFER_SIZE	2048
 
 
-uint16_t* DualPortRAM_GetBuffer();
+int16_t* DualPortRAM_GetBuffer();
+uint8_t DualPortRAM_GetItemAt( uint16_t index, int16_t* out );
+
 
 void DualPortRAM_UpdateDebug();
-
+void DualPortRAM_UpdateSecond();
 void DualPortRAM_InitDebug();
 
 

@@ -15,5 +15,6 @@ uint64_t Get_systime_ms( void );
 
 void Delay_ms(uint32_t delayInMs);
 
+void Systimer_OnSecondChanged();
 
 #endif /* SYSTIMER_H_ */

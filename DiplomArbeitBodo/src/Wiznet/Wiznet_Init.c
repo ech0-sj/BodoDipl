@@ -6,7 +6,7 @@
  */ 
 
 #include "Wiznet_Init.h"
-
+#include "../Persistent/PersistentItems.h"
 
 
 wiz_NetInfo gWIZNETINFO = {
@@ -26,6 +26,7 @@ wiz_NetInfo* GetWiznetInfo()
 
 void SetupNetSetting( wiz_NetInfo* wiznetInfo )
 {
+	/*
 	wiznetInfo->mac[0] = 0x00;
 	wiznetInfo->mac[1] = 0x08;
 	wiznetInfo->mac[2] = 0xdc;
@@ -41,6 +42,11 @@ void SetupNetSetting( wiz_NetInfo* wiznetInfo )
 	wiznetInfo->sn[1] = 255;
 	wiznetInfo->sn[2] = 255;
 	wiznetInfo->sn[3] = 0;
+	*/
+	
+	LoadMACWiznet( wiznetInfo->mac ); 
+	LoadSubnetWiznet( wiznetInfo->sn ); 
+	LoadIPWiznet( wiznetInfo->ip ); 
 	
 	wiznetInfo->gw[0] = 192;
 	wiznetInfo->gw[1] = 168;
@@ -76,8 +82,9 @@ void W5500_ResetHW(void)
 }
 
 
-InitResult_t W5500_Init(wiz_NetInfo* NetworkConfig)
+InitResult_t W5500_Init( void )
 {
+	 wiz_NetInfo* pNetInfo = GetWiznetInfo();
 	uint8_t tmp;
 	uint8_t memsize[2][8] = {
 		{2,2,2,2,2,2,2,2} /* Configure RX Socket Size in kByte*/
@@ -89,6 +96,9 @@ InitResult_t W5500_Init(wiz_NetInfo* NetworkConfig)
 	// spi_init_sw();			// Software-SPI-Treiber laden
 	/* Critical section callback - No use in this example */
 	//reg_wizchip_cris_cbfunc(0, 0);
+	
+	
+	SetupNetSetting( pNetInfo ); 
 	
 	
 	/* Chip selection call back */
@@ -127,9 +137,9 @@ InitResult_t W5500_Init(wiz_NetInfo* NetworkConfig)
 	//This is wehre the "Black Magic" happens
 	//
 	
-	ctlnetwork(CN_SET_NETINFO,NetworkConfig);	//Write Config in Chip
+	ctlnetwork(CN_SET_NETINFO,pNetInfo);	//Write Config in Chip
 	
-	ctlnetwork(CN_GET_NETINFO,NetworkConfig);	//Read Config Back
+	ctlnetwork(CN_GET_NETINFO,pNetInfo);	//Read Config Back
 	
 	
 	return Okay;								//Return Okay

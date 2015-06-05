@@ -50,13 +50,13 @@
 #include "HTTPserver/httpServer.h"
 #include "HTTPserver/html_pages.h"
 
-
+/*
 uint8_t gHttpRxBuffer[DATA_BUF_SIZE];
 uint8_t gHttpTxBuffer[DATA_BUF_SIZE];
 uint8_t socklist[NUM_OF_WIZNET_SOCKETS];
 extern HTMLPageDef gIndexHTML;
 extern HTMLPageDef gDataHTML;
-
+*/ 
 
 int main (void)
 {
@@ -94,6 +94,7 @@ int main (void)
 	
 	// HTTP servefr einrichten 
 	// und die index.html Seite anlegen 
+	/*
 	httpServer_init( gHttpTxBuffer, gHttpRxBuffer, NUM_OF_WIZNET_SOCKETS, socklist );
 	
 	HTMLPagesCreate_index();
@@ -108,7 +109,8 @@ int main (void)
 	HTMLPagesCreate_setting();
 	htmlpagePtr = HTMLPagesGet_setting();
 	reg_httpServer_webContent( htmlpagePtr->PageName, htmlpagePtr->PageContent );
-	
+	*/
+	HTMLPagesCreate_index();
 	
 	// Usarts initialisieren
 	USARTWifi_Init( wifiBaudrate );

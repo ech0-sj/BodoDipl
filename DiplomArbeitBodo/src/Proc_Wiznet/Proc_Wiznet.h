@@ -39,5 +39,6 @@ void ProcWiznet_Init( ProcessStruct* procStruct );
 void ProcWiznet_InitRecvBuffer( WiznetReceiveBuffer* recvBuffer );
 
 void DoSimpleTelnet( SOCKET sock );
+void DoSimpleHttp( SOCKET sock ); 
 
 #endif /* PROC_WIZNET_H_ */

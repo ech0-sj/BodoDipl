@@ -65,7 +65,6 @@ void HTMLPagesUpdate_index()
 	
 	len += sprintf( &gIndexHTML.PageContent[len], 
 		"Willkommen auf der Webseite <p>"
-		"<a href=\"./data.html\">Hier gehts zu den Daten</a>"
 	);
 	
 	HTML_GetFoot( &gIndexHTML.PageContent[len] );
@@ -142,7 +141,7 @@ void HTMLPagesUpdate_setting( void )
 	
 	len += sprintf( &gSettingHTML.PageContent[len],
 	
-		 "<form action=\"setting.cgi\" method=GET >"
+		 "<form action=\"takeSetup.html\" method=GET >"
 		 "<label for=\"ip1\">IP Address</label>"
 		 "<input type=\"value\" name=\"ip1\" maxlength=\"3\" max=\"254\">"
 		 "<input type=\"value\" name=\"ip2\" maxlength=\"3\" max=\"254\">"

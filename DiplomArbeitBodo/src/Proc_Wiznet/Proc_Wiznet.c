@@ -8,8 +8,8 @@
 #include "Proc_Wiznet.h"
 #include "string.h"
 #include "malloc.h"
+#include "Http/HttpSimple.h"
 
-#include "../HTTPserver/httpServer.h"
 
 WiznetReceiveBuffer gWizRecvbuffer[NUM_OF_WIZNET_SOCKETS];
 extern uint8_t socklist[NUM_OF_WIZNET_SOCKETS];
@@ -30,7 +30,6 @@ void ProcWiznet_Init( ProcessStruct* procStruct )
 	for( int i = 0; i < NUM_OF_WIZNET_SOCKETS; i++ )
 	{
 			ProcWiznet_InitRecvBuffer( &gWizRecvbuffer[i] );
-			socklist[i] = i; 
 	}
 }
 
@@ -75,7 +74,8 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 			switch( getSn_PORT(sn) ) 
 			{
 				case WIZNET_HTTP_PORT:
-					HttpServer_ProcessRequest( sn );
+					// HttpServer_ProcessRequest( sn );
+					DoSimpleHttp( sn ); 
 				break; 
 				
 				// weitere Protokolle hier 
@@ -94,7 +94,7 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 		{	
 			if((ret=disconnect(sn)) != SOCK_OK) return ret;
 		
-			printf("log %d:Socket Closed\r\n", sn);
+			//printf("log %d:Socket Closed\r\n", sn);
 			
 		}break;
 
@@ -104,7 +104,7 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 		{
 			if( (ret = listen(sn)) != SOCK_OK) return ret;
 			
-			printf("log %d: Listening on port %d \n", sn, getSn_PORT( sn ) );
+			// printf("log %d: Listening on port %d \n", sn, getSn_PORT( sn ) );
 			
 		}break;
 
@@ -124,7 +124,7 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 			
 			close(sn);
 			if((ret=socket(sn, Sn_MR_TCP, port, 0x00)) != sn) return ret; 
-			printf( "log %d socket started \n", sn );
+			// printf( "log %d socket started \n", sn );
 			
 		}break;
 		

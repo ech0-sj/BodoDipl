@@ -10,17 +10,17 @@
 #include "string.h"
 #include "../DualportRAM/Dualportram_Storage.h"
 #include "../Tools/Tools.h"
-
+#include "../Ethernet/Ethernet.h"
 
 void DoSimpleTelnet( SOCKET sock )
 {
-	uint16_t maxlen = 100; 
+	uint16_t maxlen = DATA_BUF_SIZE; 
 	uint16_t len; 
-	uint8_t msgBuffer[100];
-	uint8_t outbuffer[100]; 
 	
+	uint8_t msgBuffer[100];
+	uint8_t outbuffer[100];
 	// Nachsehen, wieviele Daten angekommen sind
-	len = getSn_RX_RSR(sock); 
+	len = Socket_GetRxCount(sock); 
 	if( len < 1 )
 		return; 
 		
@@ -29,10 +29,9 @@ void DoSimpleTelnet( SOCKET sock )
 		len = maxlen;
 	
 	// daten aus dem wiznet buffer holen 
-	len = recv(sock, msgBuffer, len);
-	printf( "telnet recv sock %i, len %i \n", sock, len ); 
-	
-	
+	len = TCP_recv(sock, msgBuffer, len);
+
+	 
 	if( strstr( msgBuffer, "get ") )
 	{
 		char* ptr; 
@@ -56,14 +55,11 @@ void DoSimpleTelnet( SOCKET sock )
 				len = sprintf( outbuffer, "0\n" );
 			}
 			
-			send( sock, outbuffer, len );
-			
-			printf( "%s", outbuffer );
+			TCP_send( sock, outbuffer, len );
 			
 			memset( outbuffer, 0, 100 );
 			ptr = strwrd( ptr, outbuffer, len, delim );
 		}
 		 
 	}
-	
 }

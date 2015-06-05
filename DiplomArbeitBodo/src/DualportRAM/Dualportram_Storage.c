@@ -34,7 +34,7 @@ void DualPortRAM_UpdateDebug()
 		dualram[i] = i + (Get_systime_ms() % 32000 );
 	}		
 	
-	printf( "log dualram updated fst value %i\n", dualram[0]);
+	// printf( "log dualram updated fst value %i\n", dualram[0]);
 }
 
 void DualPortRAM_UpdateSecond()

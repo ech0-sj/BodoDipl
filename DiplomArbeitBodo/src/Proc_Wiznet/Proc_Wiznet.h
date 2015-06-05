@@ -21,6 +21,7 @@
 
 #define WIZNET_HTTP_SOCKET_COUNT	3				// die ersten 3 Sockets sollen für HTTP festgelegt werden
 #define WIZNET_HTTP_PORT			80				// Port für HTTP 
+#define WIZNET_MODBUS_PORT			502				// Port für Modbus TCP
 #define WIZNET_CUSTOM_PORT			1234			// Port für eigene Protokolle 
 
 #define DATA_BUF_SIZE				2048			// Buffer size 
@@ -39,6 +40,6 @@ void ProcWiznet_Init( ProcessStruct* procStruct );
 void ProcWiznet_InitRecvBuffer( WiznetReceiveBuffer* recvBuffer );
 
 void DoSimpleTelnet( SOCKET sock );
-void DoSimpleHttp( SOCKET sock ); 
+void HTTP_DoSimpleHTTP( SOCKET sock ); 
 
 #endif /* PROC_WIZNET_H_ */

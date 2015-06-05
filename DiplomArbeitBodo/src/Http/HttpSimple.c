@@ -20,7 +20,7 @@ uint8_t gHttpTxBuffer[DATA_BUF_SIZE];
 
 
 
-void DoSimpleHttp( SOCKET sock )
+void HTTP_DoSimpleHTTP( SOCKET sock )
 {
 	uint16_t maxlen = DATA_BUF_SIZE;
 	uint16_t len;
@@ -232,8 +232,10 @@ void HTTP_DoPage_DataHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen )
 	HTMLPageDef* html;
 	uint8_t* pagePtr;
 	
-	HTMLPagesCreate_data();
+	// HTMLPagesCreate_data();
 	html = HTMLPagesGet_data();
+	
+	
 	sendlen = sprintf( gHttpTxBuffer,
 	"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: keep-alive\r\nContent-Length: %i \r\n\r\n %s",
 	strlen(html->PageContent),

@@ -23,6 +23,10 @@ void Systimer_OnSecondChanged()
 	DualPortRAM_UpdateSecond();
 	if( !(mstimer % 10000) )
 	{
+		if( mstimer < 20000 )
+		{
+			HTMLPagesCreate_data();
+		}
 		DualPortRAM_UpdateDebug();
 		HTMLPagesUpdate_data();
 	}

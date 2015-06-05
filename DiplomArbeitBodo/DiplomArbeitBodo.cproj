@@ -514,6 +514,7 @@
     <Folder Include="src\DualportRAM" />
     <Folder Include="src\HTTP" />
     <Folder Include="src\Ethernet" />
+    <Folder Include="src\ModbusTCP" />
     <Folder Include="src\Persistent" />
     <Folder Include="src\Proc_Wiznet" />
     <Folder Include="src\Tools" />
@@ -569,6 +570,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\LED.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ModbusTCP\ModbusTCP_Slave.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ModbusTCP\ModbusTCP_slave.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Persistent\PersistentItems.c">

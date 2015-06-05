@@ -59,7 +59,11 @@ void DoSimpleTelnet( SOCKET sock )
 			
 			memset( outbuffer, 0, 100 );
 			ptr = strwrd( ptr, outbuffer, len, delim );
-		}
-		 
+		}	 
+	}
+	else 
+	{
+		for( int i = 0; i < len; i++ )
+			printf( "[%s] ", msgBuffer[i] ); 
 	}
 }

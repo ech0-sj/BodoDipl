@@ -9,6 +9,7 @@
 #include "string.h"
 #include "malloc.h"
 #include "Http/HttpSimple.h"
+#include "ModbusTCP/ModbusTCP_slave.h"
 
 
 WiznetReceiveBuffer gWizRecvbuffer[NUM_OF_WIZNET_SOCKETS];
@@ -75,8 +76,12 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 			{
 				case WIZNET_HTTP_PORT:
 					// HttpServer_ProcessRequest( sn );
-					DoSimpleHttp( sn ); 
+					HTTP_DoSimpleHTTP( sn ); 
 				break; 
+				
+				case WIZNET_MODBUS_PORT:
+					Modbus_DoSlaveTCP( sn );
+				break;
 				
 				// weitere Protokolle hier 
 				case WIZNET_CUSTOM_PORT:
@@ -119,7 +124,8 @@ int32_t ProcWiznet_TCPLoop(uint8_t sn, uint8_t* buf )
 			}
 			else 
 			{
-				port = WIZNET_CUSTOM_PORT;
+				port = WIZNET_MODBUS_PORT;
+				// port = WIZNET_CUSTOM_PORT;
 			}
 			
 			close(sn);

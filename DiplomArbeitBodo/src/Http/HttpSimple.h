@@ -29,7 +29,7 @@ typedef enum
 
 
 
-void DoSimpleHttp( SOCKET sock );
+void HTTP_DoSimpleHTTP( SOCKET sock );
 
 eHTTPType HTTP_ParseType( uint8_t* httpMsg, uint32_t msglen ); 
 

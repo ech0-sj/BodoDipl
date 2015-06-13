@@ -20,7 +20,6 @@ uint8_t DualPortRAM_GetItemAt( uint16_t index, int16_t* out );
 
 
 void DualPortRAM_UpdateDebug();
-void DualPortRAM_UpdateSecond();
 void DualPortRAM_InitDebug();
 
 

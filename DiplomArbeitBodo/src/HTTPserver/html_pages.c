@@ -10,6 +10,7 @@
 #include "malloc.h"
 #include "../DualportRAM/Dualportram_Storage.h"
 
+#if 0 
 
 uint32_t HTML_GetHead( char* pageDef, char* title )
 {
@@ -161,3 +162,4 @@ void HTMLPagesUpdate_setting( void )
 
 
 
+#endif 

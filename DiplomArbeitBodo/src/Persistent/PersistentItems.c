@@ -15,7 +15,7 @@ const uint8_t DEFAULT_MAC[] = {0x00, 0x08, 0xdc, 0xab, 0xcd, 0xef};
 uint8_t gPersist_IP[4] = {0}; 
 uint8_t gPersist_SUB[4] = {0};
 uint8_t gPersist_MAC[6] = {0};
-	
+uint8_t gPersist_ModbusID = 1; 
 
 PersisentResult LoadIPWiznet( uint8_t* ip )
 {
@@ -58,12 +58,25 @@ PersisentResult LoadSubnetWiznet( uint8_t* subnet )
 	if( gPersist_SUB[0] == 0 )
 		memcpy( gPersist_SUB, DEFAULT_SUB, 4 ); 
 	
-	memcpy( subnet, gPersist_SUB, 6 );
+	memcpy( subnet, gPersist_SUB, 4 );
 	return PersRes_Successful;
 }
 
 PersisentResult SaveSubnetWiznet( uint8_t* subnet )
 {
-	memcpy( gPersist_SUB, subnet, 6 );
+	memcpy( gPersist_SUB, subnet, 4 );
+	return PersRes_Successful;
+}
+
+
+PersisentResult LoadModbusID( uint8_t* modbusid )
+{
+	*modbusid = gPersist_ModbusID;
+	return PersRes_Successful;
+}
+
+PersisentResult SaveModbusID( uint8_t* modbusid )
+{
+	gPersist_ModbusID = *modbusid;
 	return PersRes_Successful;
 }

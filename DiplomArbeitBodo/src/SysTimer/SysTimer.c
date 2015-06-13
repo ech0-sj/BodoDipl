@@ -7,9 +7,14 @@
 #include "asf.h"
 #include "SysTimer.h"
 /* Systick Counter */
-static volatile uint64_t g_ul_ms_ticks = 0U;
 
-void Systime_Second_Timer();
+static volatile uint64_t g_ul_ms_ticks = 0U;
+static volatile TimeStruct gRunningTime = {0};
+
+
+
+void Systime_Second_Timer( void );
+
 
 void SysTick_Handler(void)
 {
@@ -18,7 +23,15 @@ void SysTick_Handler(void)
 	
 	// sekundenzähler HTTP
 	if( !(g_ul_ms_ticks % 1000 ) )
+	{
 		Systimer_OnSecondChanged();
+	}
+}
+
+
+TimeStruct* Systimer_GetRunningTime( void )
+{
+	return &gRunningTime;
 }
 
 

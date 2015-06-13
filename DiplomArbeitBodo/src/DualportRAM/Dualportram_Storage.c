@@ -29,7 +29,7 @@ void DualPortRAM_UpdateDebug()
 {
 	uint16_t* dualram = DualPortRAM_GetBuffer();
 	
-	for( int i = 2; i < DUALPORT_RAM_BUFFER_SIZE; i++ )
+	for( int i = 1; i < DUALPORT_RAM_BUFFER_SIZE; i++ )
 	{
 		dualram[i] = i + (Get_systime_ms() % 32000 );
 	}		
@@ -37,13 +37,6 @@ void DualPortRAM_UpdateDebug()
 	// printf( "log dualram updated fst value %i\n", dualram[0]);
 }
 
-void DualPortRAM_UpdateSecond()
-{
-	uint16_t* dualram = DualPortRAM_GetBuffer();
-	dualram[1] ++;
-	if( dualram[1] > 32000 )
-		dualram[1] = 0; 
-}
 
 void DualPortRAM_InitDebug()
 {

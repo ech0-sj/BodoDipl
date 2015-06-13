@@ -515,6 +515,7 @@
     <Folder Include="src\HTTP" />
     <Folder Include="src\Ethernet" />
     <Folder Include="src\ModbusTCP" />
+    <Folder Include="src\DataAccess" />
     <Folder Include="src\Persistent" />
     <Folder Include="src\Proc_Wiznet" />
     <Folder Include="src\Tools" />
@@ -527,6 +528,9 @@
     <Folder Include="src\Wiznet\W5500" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\DataAccess\DataAccess.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\DualportRAM\Dualportram_Storage.c">
       <SubType>compile</SubType>
     </Compile>
@@ -563,10 +567,31 @@
     <Compile Include="src\HTTPserver\httpUtil.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\HTTP\HtmlPages.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTP\HtmlPages.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTP\HtmlTools.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTP\HTML_DataPage.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTP\HTML_Settingspage.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTP\HTML_Tools.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\HTTP\HttpSimple.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\HTTP\HttpSimple.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\HTTP\HTTP_RegisterPage.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\LED.h">
@@ -591,6 +616,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Proc_Wiznet\simpleTelnet.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\DataAccess\DataAccess.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\SysTimer\Systimer_OnSecondChanged.c">

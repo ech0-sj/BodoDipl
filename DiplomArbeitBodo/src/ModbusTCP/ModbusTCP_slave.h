@@ -28,6 +28,18 @@ typedef enum
 }ModbusFunc;
 
 
+typedef enum
+{
+	Mod_Excep_NoError = 0,
+	Mod_Excep_InvFunc,
+	Mod_Excep_InvAddr,
+	Mod_Excep_InvValue,
+	Mod_Excep_Generous,
+}ModbusExceoptionCode;
+
+#define MODBUS_ERROR_FUNC_MASK	0x80
+
+
 void Modbus_DoSlaveTCP( SOCKET sock );
 
 

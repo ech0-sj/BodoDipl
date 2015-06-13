@@ -32,5 +32,8 @@ PersisentResult SaveMACWiznet( uint8_t* mac );
 PersisentResult LoadSubnetWiznet( uint8_t* subnet );
 PersisentResult SaveSubnetWiznet( uint8_t* subnet );
 
+PersisentResult LoadModbusID( uint8_t* modbusid );
+PersisentResult SaveModbusID( uint8_t* modbusid );
+
 
 #endif /* PERSISTENTITEMS_H_ */

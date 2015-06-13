@@ -11,6 +11,7 @@
 #include "../DualportRAM/Dualportram_Storage.h"
 #include "../HTTPserver/html_pages.h"
 
+void Systimer_UpdateRunningtime( void );
 
 
 // Wird jede Seunde gerufen
@@ -18,16 +19,38 @@ void Systimer_OnSecondChanged()
 {
 	uint64_t mstimer = Get_systime_ms();
 	
-	httpServer_time_handler();
+	Systimer_UpdateRunningtime(  ); 
 	
-	DualPortRAM_UpdateSecond();
+	
 	if( !(mstimer % 10000) )
 	{
-		if( mstimer < 20000 )
-		{
-			HTMLPagesCreate_data();
-		}
 		DualPortRAM_UpdateDebug();
-		HTMLPagesUpdate_data();
 	}
 }
+
+
+
+void Systimer_UpdateRunningtime(  )
+{
+	TimeStruct* timer = Systimer_GetRunningTime();
+	
+	timer->second += 1;
+	if( timer->second >= 60 )
+	{
+		timer->minute += 1;
+		timer->second = 0;
+	}
+	
+	if( timer->minute >= 60 )
+	{
+		timer->hour += 1;
+		timer->minute = 0;
+	}
+	
+	if( timer->hour >= 24 )
+	{
+		timer->day += 1;
+		timer->hour = 0;
+	}
+}
+

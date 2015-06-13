@@ -47,16 +47,9 @@
 #include "Proc_Serial/Proc_Serial.h"
 #include "Proc_Wiznet/Proc_Wiznet.h"
 
-#include "HTTPserver/httpServer.h"
-#include "HTTPserver/html_pages.h"
+#include "Http/HttpSimple.h"
+#include "Http/HtmlPages.h"
 
-/*
-uint8_t gHttpRxBuffer[DATA_BUF_SIZE];
-uint8_t gHttpTxBuffer[DATA_BUF_SIZE];
-uint8_t socklist[NUM_OF_WIZNET_SOCKETS];
-extern HTMLPageDef gIndexHTML;
-extern HTMLPageDef gDataHTML;
-*/ 
 
 int main (void)
 {
@@ -71,7 +64,7 @@ int main (void)
 	netmode_type netMode; 
 	uint32_t netModeAsint;
 	
-	HTMLPageDef* htmlpagePtr;
+	HtmlPageDescriptor htmldescriptor;
 	
 // begin initphase	
 	
@@ -91,26 +84,6 @@ int main (void)
 	// Wiznet mit default werten belegen
 	W5500_ConfigureIOPins();
 	W5500_Init(  );
-	
-	// HTTP servefr einrichten 
-	// und die index.html Seite anlegen 
-	/*
-	httpServer_init( gHttpTxBuffer, gHttpRxBuffer, NUM_OF_WIZNET_SOCKETS, socklist );
-	
-	HTMLPagesCreate_index();
-	htmlpagePtr = HTMLPagesGet_index();
-	reg_httpServer_webContent( htmlpagePtr->PageName, htmlpagePtr->PageContent );
-	
-	HTMLPagesCreate_data();
-	htmlpagePtr = HTMLPagesGet_data();
-	reg_httpServer_webContent( htmlpagePtr->PageName, htmlpagePtr->PageContent );
-	
-	
-	HTMLPagesCreate_setting();
-	htmlpagePtr = HTMLPagesGet_setting();
-	reg_httpServer_webContent( htmlpagePtr->PageName, htmlpagePtr->PageContent );
-	*/
-	HTMLPagesCreate_index();
 	
 	// Usarts initialisieren
 	USARTWifi_Init( wifiBaudrate );
@@ -133,6 +106,26 @@ int main (void)
 	
 	
 	// TODO weitere Prozesse hier erstellen 
+	
+	
+	htmldescriptor = HTML_CreatePage_Index();
+	HTTP_RegisterPage( &htmldescriptor ); 
+	
+	htmldescriptor = HTML_CreatePage_Info();
+	HTTP_RegisterPage( &htmldescriptor );
+	
+	htmldescriptor = HTML_CreatePage_Data();
+	HTTP_RegisterPage( &htmldescriptor );
+	
+	htmldescriptor = HTML_CreatePage_DataRange();
+	HTTP_RegisterPage( &htmldescriptor );
+	
+	htmldescriptor = HTML_CreatePage_Setting();
+	HTTP_RegisterPage( &htmldescriptor );
+	htmldescriptor = HTML_CreatePage_SettingEthernet();
+	HTTP_RegisterPage( &htmldescriptor );
+	htmldescriptor = HTML_CreatePage_SettingModbus();
+	HTTP_RegisterPage( &htmldescriptor );
 	
 	
 	// init fertig -> welcome zeigen 

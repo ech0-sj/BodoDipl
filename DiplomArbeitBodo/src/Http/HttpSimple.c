@@ -13,8 +13,11 @@
 #include "../HTTPserver/html_pages.h"
 
 uint8_t gHttpRxBuffer[DATA_BUF_SIZE];
-uint8_t gHttpTxBuffer[DATA_BUF_SIZE];
+uint8_t gHttpTxBuffer[DATA_BUF_SIZE_TX];
 
+
+static const uint8_t HTTP_HEAD_1[] = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: keep-alive\r\nContent-Length:";
+static const uint8_t HTTP_HEAD_2[] = "\r\n\r\n";
 
 
 
@@ -34,6 +37,7 @@ void HTTP_DoSimpleHTTP( SOCKET sock )
 	len = ( len > maxlen ) ? maxlen : len;	
 	len = TCP_recv( sock, msgBuffer, len ); 
 	
+	memset( gHttpTxBuffer, 0, DATA_BUF_SIZE_TX );
 	
 	switch( HTTP_ParseType(msgBuffer, len) )
 	{
@@ -49,46 +53,7 @@ void HTTP_DoSimpleHTTP( SOCKET sock )
 		break;
 	}
 	
-	
-	
-	//Aufbau einer unterstützten Anfrage:
-	// GET /url HTTP/1.1 HOST: ip ....
-	
-/*	
-	msgBuffer = strwrd( msgBuffer, workingBuffer, 100, " ");
-	if( msgBuffer )
-	{
-		printf( "[%s]\n", workingBuffer);
-		if( !strcmp(workingBuffer, "GET") )
-		{
-			// Get Anfrage gefunden
-			msgBuffer = strwrd( msgBuffer, workingBuffer, 100, " ");
-			if( msgBuffer)
-			{
-				printf( "[%s]\n", workingBuffer);
-				if( workingBuffer[0] == '/' )
-				{
-					// eine URL gefudnen
-					htmlpagePtr = HTMLPagesGet_index();
-					
-					len = sprintf( outbuffer,
-					"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: keep-alive\r\nContent-Length: %i \r\n\r\n %s",
-					strlen(htmlpagePtr->PageContent),
-					htmlpagePtr->PageContent
-					);
-					TCP_send( sock, outbuffer, len );
-				}
-				
-			}
-			
-		}
-	}
-	
-	
-	*/
-	
 }
-
 
 
 eHTTPType HTTP_ParseType( uint8_t* httpMsg, uint32_t msglen )
@@ -113,10 +78,16 @@ eHTTPType HTTP_ParseType( uint8_t* httpMsg, uint32_t msglen )
 
 int HTTP_ProcessGETRequest( SOCKET sock, uint8_t* httpMsg, uint32_t msglen )
 {
+	HtmlPageDescriptor* foundPage = NULL;
+	
 	uint8_t url[200];
 	uint32_t urllen = 200;
 	
+	uint8_t* outbuf = gHttpTxBuffer; 
+	uint32_t outlen = 0; 
 	uint32_t pagelen = 0; 
+	
+	memset( outbuf, ' ', 105 ); 
 	
 	if( HTTP_ParseURL(httpMsg, msglen, url, &urllen ) != 0 ) 
 	{
@@ -124,47 +95,28 @@ int HTTP_ProcessGETRequest( SOCKET sock, uint8_t* httpMsg, uint32_t msglen )
 		return -1; 	
 	}
 	
-	
-	// URL string nach Seiten durchsuchen und 
-	// die entsprechende Seite aufrufen 
-	
-	
-	if( ( strcmp( url, "/") == 0 )
-	||	( strstr( url, "/index.html") != NULL ) )
+	// Falls nichts angegeben ist, soll die 
+	// Index.html gerufen werden 
+	if( strcmp( url, "/") == 0 )
 	{
-		// index. html gewählt 
-		pagelen = strlen( "/index.html");
-		HTTP_DoPage_IndexHTML( sock, &url[pagelen], urllen - pagelen ); 	
-	}
-	else if( strstr( url, "/info.html") != NULL )
-	{
-		// index. html gewählt
-		pagelen = strlen( "/info.html");
-		HTTP_DoPage_InfoHTML( sock, &url[pagelen], urllen - pagelen );
-	}
-	else if( strstr( url, "/setting.html") != NULL )
-	{
-		// index. html gewählt
-		pagelen = strlen( "/setting.html");
-		HTTP_DoPage_SettingHTML( sock, &url[pagelen], urllen - pagelen );
-	}
-	else if( strstr( url, "/data.html") != NULL )
-	{
-		// index. html gewählt
-		pagelen = strlen( "/data.html");
-		HTTP_DoPage_DataHTML( sock, &url[pagelen], urllen - pagelen );
-	}
-	else if( strstr( url, "/takeSetup.html") != NULL )
-	{
-		// index. html gewählt
-		pagelen = strlen( "/takeSetup.html");
-		HTTP_DoPage_TakesetupHTML( sock, &url[pagelen], urllen - pagelen );
-	}
-	else
-	{
-		HTTP_SendNotFound( sock ); 
+		strcpy( url, "/index.html\0"); 
 	}
 	
+	// Passende Seite suchen, und bearbeiten
+	if( (foundPage = HTTP_FindPageByName( &url[1]) ) != NULL )
+	{
+		foundPage->HtmlPageDescription( url, &outbuf[105] ); 
+		
+		// HTTP Header mit Länge einbauen, dann senden 
+		pagelen = strlen( &outbuf[105]); 
+		sprintf( outbuf, "%s %i %s", HTTP_HEAD_1, pagelen, HTTP_HEAD_2 ); 
+		TCP_send( sock, outbuf, 105 + pagelen ); 
+	}	
+	else 
+	{
+		HTTP_SendNotFound(sock); 
+	}	
+	return 0;
 }
 
 
@@ -198,106 +150,4 @@ void HTTP_SendNotFound( SOCKET sock)
 	TCP_send( sock, gHttpTxBuffer, strlen(gHttpTxBuffer) );
 }
 
-
-
-
-#include "../HTTPserver/html_pages.h"
-
-
-
-
-
-void HTTP_DoPage_IndexHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen )
-{
-	uint32_t sendlen; 
-	HTMLPageDef* html;
-	uint8_t* pagePtr; 
-	
-	HTMLPagesCreate_index();
-	html = HTMLPagesGet_index();
-	sendlen = sprintf( gHttpTxBuffer,
-					"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: keep-alive\r\nContent-Length: %i \r\n\r\n %s",
-					strlen(html->PageContent),
-					html->PageContent
-					);
-	
-	pagePtr = &gHttpTxBuffer;
-	TCP_send( sock, gHttpTxBuffer, sendlen ); 
-}
-
-
-void HTTP_DoPage_DataHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen )
-{
-	uint32_t sendlen;
-	HTMLPageDef* html;
-	uint8_t* pagePtr;
-	
-	// HTMLPagesCreate_data();
-	html = HTMLPagesGet_data();
-	
-	
-	sendlen = sprintf( gHttpTxBuffer,
-	"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: keep-alive\r\nContent-Length: %i \r\n\r\n %s",
-	strlen(html->PageContent),
-	html->PageContent
-	);
-	
-	pagePtr = &gHttpTxBuffer;
-	TCP_send( sock, gHttpTxBuffer, sendlen );
-}
-
-
-
-void HTTP_DoPage_InfoHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen )
-{
-	uint32_t sendlen;
-	HTMLPageDef* html;
-	uint8_t* pagePtr;
-	
-	HTMLPagesCreate_index();
-	html = HTMLPagesGet_index();
-	sendlen = sprintf( gHttpTxBuffer,
-	"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: keep-alive\r\nContent-Length: %i \r\n\r\n %s",
-	strlen(html->PageContent),
-	html->PageContent
-	);
-	
-	pagePtr = &gHttpTxBuffer;
-	TCP_send( sock, gHttpTxBuffer, sendlen );
-}
-
-
-void HTTP_DoPage_SettingHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen )
-{
-	uint32_t sendlen;
-	HTMLPageDef* html;
-	uint8_t* pagePtr;
-	
-	HTMLPagesCreate_setting();
-	html = HTMLPagesGet_setting();
-	sendlen = sprintf( gHttpTxBuffer,
-	"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: keep-alive\r\nContent-Length: %i \r\n\r\n %s",
-	strlen(html->PageContent),
-	html->PageContent
-	);
-	
-	pagePtr = &gHttpTxBuffer;
-	TCP_send( sock, gHttpTxBuffer, sendlen );
-}
-
-
-
-void HTTP_DoPage_TakesetupHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen )
-{
-	uint32_t sendlen;
-	HTMLPageDef* html;
-	uint8_t* pagePtr;
-	
-	sendlen = sprintf( gHttpTxBuffer,
-	"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: keep-alive\r\nContent-Length: 79 \r\n\r\n"
-	"<HTML>\r\n<BODY>\r\nDie Aenderungen uebernommen\r\n</BODY>\r\n</HTML>\r\n\0"
-	);
-	
-	pagePtr = &gHttpTxBuffer;
-	TCP_send( sock, gHttpTxBuffer, sendlen );
-}
+ 

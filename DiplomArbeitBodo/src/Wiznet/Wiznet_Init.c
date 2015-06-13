@@ -87,8 +87,8 @@ InitResult_t W5500_Init( void )
 	 wiz_NetInfo* pNetInfo = GetWiznetInfo();
 	uint8_t tmp;
 	uint8_t memsize[2][8] = {
-		{2,2,2,2,2,2,2,2} /* Configure RX Socket Size in kByte*/
-		,{2,2,2,2,2,2,2,2} /* Configure TX Socket Size in kByte*/
+		{4,4,2,2,1,1,1,1} /* Configure TX Socket Size in kByte*/
+		,{4,4,2,2,1,1,1,1} /* Configure RX Socket Size in kByte*/
 	};
 	
 	// w5500_init_io();		//Set the additional IOs to the correct value and direction

@@ -18,6 +18,9 @@
 
 
 #define DATA_BUF_SIZE 2048
+#define DATA_BUF_SIZE_TX (4096)
+
+#define HTML_MAX_DATA_PER_REQ 100
 
 typedef enum 
 {
@@ -27,6 +30,24 @@ typedef enum
 }eHTTPType;
 
 
+#define HTTP_PAGENAME_MAXLEN	30 
+typedef struct
+{
+	uint8_t PageName[HTTP_PAGENAME_MAXLEN];		// z.B.: index.html , ... 
+	 void (*HtmlPageDescription)( uint8_t* completeUrl_z, uint8_t* outPage_z );
+}HtmlPageDescriptor;
+
+
+typedef struct HTML_PAGE_STRUCT
+{
+	HtmlPageDescriptor page;
+	struct HTML_PAGE_STRUCT* pNext;
+}HtmlPagesList;
+
+
+void HTTP_RegisterPage( HtmlPageDescriptor* description ); 
+HtmlPageDescriptor* HTTP_FindPageByName( uint8_t* pageName_z);
+HtmlPagesList* HTTP_GetPagesList();
 
 
 void HTTP_DoSimpleHTTP( SOCKET sock );
@@ -39,16 +60,5 @@ int HTTP_ProcessGETRequest( SOCKET sock, uint8_t* httpMsg, uint32_t msglen );
 
 void HTTP_SendNotFound( SOCKET sock ); 
 
-
-
-void HTTP_DoPage_IndexHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen );
-
-void HTTP_DoPage_InfoHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen );
-
-void HTTP_DoPage_DataHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen );
-
-void HTTP_DoPage_SettingHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen );
-
-void HTTP_DoPage_TakesetupHTML( SOCKET sock, uint8_t* httpMsg, uint32_t msglen );
 
 #endif /* HTTPSIMPLE_H_ */

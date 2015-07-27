@@ -22,7 +22,8 @@ https://room-15.github.io/blog/2015/03/26/esp8266-at-command-reference/#AT+GMR
 */ 
 
 
-#define ESP_MAX_BLOCK_SIZE	2048
+#define ESP_MAX_BLOCK_SIZE		2048
+#define ESP_SEND_DELAY_TIME_MS	40
 
 #define ESPCMD_CMDEND		"\r\n\0"
 #define ESPCMD_REBOOT		"AT+RST\0"

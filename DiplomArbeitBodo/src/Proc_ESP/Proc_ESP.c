@@ -168,6 +168,10 @@ void ProcESP( ProcessStruct* procStruct )
 		
 		case ESPState_Server:
 		{
+			printf( "Wifi server started \n");
+			printf( "connect via web browser to \n");
+			printf( "192.168.4.1 \n");
+			
 			// waiting for connection 
 			ProcEsp_UpdateState( ESPState_Server_running );
 		}//no break;
@@ -175,7 +179,7 @@ void ProcESP( ProcessStruct* procStruct )
 		{
 		}break;
 		
-		
+#ifdef TRY_ASYNC_WITHOUT_DELAY
 		case ESPState_SendAsyncHead:
 		{
 			ESPAsyncMsgBuffer* asyncBuffer = ESP_GetAsyncBuffer();
@@ -214,7 +218,7 @@ void ProcESP( ProcessStruct* procStruct )
 		{
 		}break;
 
-		
+#endif	
 		default: 
 		{
 			ProcEsp_UpdateState( ESPState_start ); 
@@ -376,7 +380,7 @@ eProcResult ProcESP_Receive( ProcEspStruct* espStruct, uint8_t* inBuffer, uint32
 			funcResult = ProcESP_DoReceive( inBuffer, inBuflen );
 		}break;
 					
-				
+#ifdef TRY_ASYNC_WITHOUT_DELAY	
 		case ESPState_SendAsyncHead_res:
 		{
 			DebugOut( "    <- [%s]", inBuffer );
@@ -431,7 +435,7 @@ eProcResult ProcESP_Receive( ProcEspStruct* espStruct, uint8_t* inBuffer, uint32
 			}
 		}break;
 				
-				
+#endif		
 				
 				
 				
@@ -499,8 +503,9 @@ eProcResult ProcESP_DoReceive( uint8_t* msg, uint32_t len )
 	ptr++; 
 	
 	// Nun die Nachricht in die Auswertung geben 
-	HTTP_DoSimpleHTTP_ByMessage( id, ptr, strlen(ptr)); 
-	
+	HTTP_DoSimpleHTTP_ByMessage( id, ptr, strlen(ptr));
+	 
+#ifdef TRY_ASYNC_WITHOUT_DELAY
 	// Das übertragen von Seiten ist teilw. kompliziert
 	// zum einen ist der ESP recht lahm 
 	// zum anderen dürfen die Blöcke nicht länger als 2KB sein
@@ -512,10 +517,11 @@ eProcResult ProcESP_DoReceive( uint8_t* msg, uint32_t len )
 	// 1. Mitteilen an wen, und wie lanf
 	// 2. Daten 
 	// 3. beenden der Verbindung 
-	
+
 	if( asyncBuffer->bufferLen > 0 )
 	{		
 		ProcEsp_UpdateState( ESPState_SendAsyncHead ); 		
 	}
+#endif 
 	return ProcResult_OK; 
 }

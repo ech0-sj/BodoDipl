@@ -96,30 +96,51 @@ int ESP_SendCompleteMessage( uint8_t id, uint8_t* msg, uint32_t msglen )
 	uint32_t offset; 
 	uint32_t blocklen; 
 	
-	len = sprintf( tempbuf, "%s%i,%i,", ESPCMD_SENDMESSAGE, id, msglen );
-			
+	#if 0
+	len = sprintf( tempbuf, "%s%i,%i,", ESPCMD_SENDMESSAGE, id, msglen );		
 	USARTWifi_Write( tempbuf, len ); 
 	USARTWifi_Write( "\r\n", 2); 
 	Delay_ms( 20); 
-	
+	#endif 
 	
 	offset = 0; 
-	blocklen = ( msglen - offset ) % 2048; 
+	blocklen = ( msglen - offset );
+	if( blocklen > ESP_MAX_BLOCK_SIZE )
+		blocklen = ESP_MAX_BLOCK_SIZE;
+	 
 	while( blocklen > 0 )
 	{			
+		// sagen wie viel für wen kommt 
+		len = sprintf( tempbuf, "%s%i,%i%s", ESPCMD_SENDMESSAGE, id, blocklen, ESPCMD_CMDEND );
+		USARTWifi_Write( tempbuf, len );
+		
+			DebugConsole( tempbuf, len );
+			
+		Delay_ms(ESP_SEND_DELAY_TIME_MS);
+		
+		// den Block hinterher senden 
 		USARTWifi_Write( &msg[offset], blocklen ); 
 		USARTWifi_Write( "\r\n", 2); 
-		Delay_ms( 20); 
+
+			DebugConsole( &msg[offset], blocklen );
+			DebugConsole( "\r\n", 2);
+		
+		Delay_ms(ESP_SEND_DELAY_TIME_MS); 
+		
+		// nächste Position vorschieben
 		offset += blocklen; 
-		blocklen = ( msglen - offset ) % 2048; 
+		blocklen = ( msglen - offset );
+		if( blocklen > ESP_MAX_BLOCK_SIZE )
+			blocklen = ESP_MAX_BLOCK_SIZE; 
 	}
 
+	// Verbindung schliessen 
 	ESP_EncodeClose( id, tempbuf, &len ); 
-	USARTWifi_Write( msg, len ); 
-	Delay_ms( 20); 
+	USARTWifi_Write( tempbuf, len ); 
 
-	USARTCons_Write( tempbuf, len ); 
-	USARTCons_Write( msg, msglen ); 
+		DebugConsole( tempbuf, len );
+		
+	Delay_ms(ESP_SEND_DELAY_TIME_MS); 
 	
 	return 0;
 }

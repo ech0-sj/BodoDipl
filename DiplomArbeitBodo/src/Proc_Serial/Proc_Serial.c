@@ -66,6 +66,7 @@ void ProcSerial_InitCmdBuf( SerialCmdBuffer* cmdBuf )
 {
 	cmdBuf->lastRecv = 0; 
 	cmdBuf->nextWrite = 0; 
+	cmdBuf->lastSeen = 0;
 	memset( cmdBuf->buffer, 0, CMD_BUF_MAX_LEN );	
 }
 

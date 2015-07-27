@@ -11,16 +11,12 @@
 
 #include <asf.h>
 #include "../Ethernet/Ethernet.h"
-
+#include "conf_defaults.h"
 
 #define HTTP_HEAD "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: keep-alive\r\nContent-Length: %i \r\n\r\n\0"
 
 
 
-#define DATA_BUF_SIZE 2048
-#define DATA_BUF_SIZE_TX (4096)
-
-#define HTML_MAX_DATA_PER_REQ 100
 
 typedef enum 
 {
@@ -51,6 +47,9 @@ HtmlPagesList* HTTP_GetPagesList();
 
 
 void HTTP_DoSimpleHTTP( SOCKET sock );
+
+void HTTP_DoSimpleHTTP_ByMessage( SOCKET sock, uint8_t* msgBuffer, uint32_t len );
+
 
 eHTTPType HTTP_ParseType( uint8_t* httpMsg, uint32_t msglen ); 
 

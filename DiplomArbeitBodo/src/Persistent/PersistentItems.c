@@ -11,6 +11,9 @@
 const uint8_t DEFAULT_IP[] = { 192, 168, 1, 112 };
 const uint8_t DEFAULT_SUB[] = { 255, 255, 255, 0 };
 const uint8_t DEFAULT_MAC[] = {0x00, 0x08, 0xdc, 0xab, 0xcd, 0xef};
+const uint8_t DEFAULT_SSID[] = "test_ap\0";
+const uint8_t DEFAULT_SSIDPASS[] = "1234test\0";
+
 	
 uint8_t gPersist_IP[4] = {0}; 
 uint8_t gPersist_SUB[4] = {0};
@@ -80,3 +83,33 @@ PersisentResult SaveModbusID( uint8_t* modbusid )
 	gPersist_ModbusID = *modbusid;
 	return PersRes_Successful;
 }
+
+
+PersisentResult LoadSSIDName( uint8_t* ssid )
+{
+	strcpy( ssid, DEFAULT_SSID); 
+	return PersRes_Successful;
+}
+
+PersisentResult SaveSSIDName( uint8_t* ssid )
+{
+	return PersRes_NotSupported;	
+}
+
+
+PersisentResult LoadSSIDPass( uint8_t* ssidpass )
+{
+	strcpy( ssidpass, DEFAULT_SSIDPASS);
+	return PersRes_Successful;
+}
+
+PersisentResult SaveSSIDPass( uint8_t* ssidpass )
+{
+	return PersRes_NotSupported;
+}
+
+
+
+//EOF 
+
+

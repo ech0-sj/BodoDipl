@@ -18,6 +18,7 @@ typedef enum
 	PID_Debug,
 	PID_Serial,
 	PID_Wiznet,
+	PID_ESP,
 	// add here
 	
 	PID_Count
@@ -38,6 +39,16 @@ typedef enum
 	ProcState_Paused, 
 	ProcState_Running,
 }ProcessState;
+
+typedef enum
+{
+	
+	ProcResult_OK,
+	ProcResult_WaitForMore,
+	ProcResult_Error,
+	
+}eProcResult;
+
 
 typedef struct  
 {

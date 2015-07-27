@@ -37,6 +37,11 @@ void HTTP_DoSimpleHTTP( SOCKET sock )
 	len = ( len > maxlen ) ? maxlen : len;	
 	len = TCP_recv( sock, msgBuffer, len ); 
 	
+	return HTTP_DoSimpleHTTP_ByMessage( sock, msgBuffer, len ); 
+}
+
+void HTTP_DoSimpleHTTP_ByMessage( SOCKET sock, uint8_t* msgBuffer, uint32_t len )
+{
 	memset( gHttpTxBuffer, 0, DATA_BUF_SIZE_TX );
 	
 	switch( HTTP_ParseType(msgBuffer, len) )
@@ -45,16 +50,14 @@ void HTTP_DoSimpleHTTP( SOCKET sock )
 		{
 			HTTP_ProcessGETRequest(sock, msgBuffer, len );
 			
-		}break; 
+		}break;
 		
 		default:
-			// derzeit nicht unterstützt
-			HTTP_SendNotFound( sock ); 
+		// derzeit nicht unterstützt
+		HTTP_SendNotFound( sock );
 		break;
 	}
-	
 }
-
 
 eHTTPType HTTP_ParseType( uint8_t* httpMsg, uint32_t msglen )
 {

@@ -17,6 +17,7 @@ typedef enum
 	PersRes_Successful, 
 	PersRes_NotFound,
 	PersRes_Error, 
+	PersRes_NotSupported,
 	
 }PersisentResult;
 
@@ -35,5 +36,10 @@ PersisentResult SaveSubnetWiznet( uint8_t* subnet );
 PersisentResult LoadModbusID( uint8_t* modbusid );
 PersisentResult SaveModbusID( uint8_t* modbusid );
 
+PersisentResult LoadSSIDName( uint8_t* ssid );
+PersisentResult SaveSSIDName( uint8_t* ssid );
+
+PersisentResult LoadSSIDPass( uint8_t* ssidpass );
+PersisentResult SaveSSIDPass( uint8_t* ssidpass );
 
 #endif /* PERSISTENTITEMS_H_ */

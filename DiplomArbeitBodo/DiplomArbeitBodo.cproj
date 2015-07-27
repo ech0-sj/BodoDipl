@@ -516,6 +516,8 @@
     <Folder Include="src\Ethernet" />
     <Folder Include="src\ModbusTCP" />
     <Folder Include="src\DataAccess" />
+    <Folder Include="src\ESP8266" />
+    <Folder Include="src\Proc_ESP" />
     <Folder Include="src\Persistent" />
     <Folder Include="src\Proc_Wiznet" />
     <Folder Include="src\Tools" />
@@ -528,6 +530,9 @@
     <Folder Include="src\Wiznet\W5500" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\config\conf_defaults.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\DataAccess\DataAccess.c">
       <SubType>compile</SubType>
     </Compile>
@@ -535,6 +540,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\DualportRAM\Dualportram_Storage.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ESP8266\ESP8266.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ESP8266\ESP8266.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Ethernet\Ethernet.c">
@@ -607,6 +618,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Persistent\PersistentItems.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Proc_ESP\Proc_ESP.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Proc_ESP\Proc_ESP.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Proc_Wiznet\Proc_Wiznet.c">

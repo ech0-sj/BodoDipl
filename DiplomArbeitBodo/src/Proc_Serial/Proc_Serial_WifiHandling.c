@@ -6,27 +6,35 @@
  */ 
 
 #include "Proc_Serial.h"
+#include "Proc_ESP/Proc_ESP.h"
 
-// debug -> auf cons ausgeben
+
 enum status_code ProcSerial_DoWifi( SerialCmdBuffer* cmdbuf )
 {
-	uint32_t pos = cmdbuf->nextWrite;
 	
-	
-	// Das AT Protokoll des ESP auswerten
-	
-	// TCP Nachrichten gehen an den Ethernet Process
-	
-	// Steuerbefehle, sollen falls möglich hier verarbeitet
-	// werden, Bei Bedarf wird ein ESP-Control-Process erzeugt
-	
-	
-	
-	// korrektur: pos steht schon auf nächsem Feld
-	if( cmdbuf->buffer[pos -1] == PROCSER_CONS_ENDBYTE )
+	ProcEspStruct* espStruct = ProcESP_getProcptr();
+	int32_t pos = cmdbuf->nextWrite;
+	uint8_t* ptr = cmdbuf->buffer;
+		
+	// Das ende Zeichen suchen 
+	for( pos = cmdbuf->nextWrite; (pos > cmdbuf->lastSeen); pos-- )
 	{
-		USARTCons_Write( cmdbuf->buffer, pos );
-		ProcSerial_InitCmdBuf( cmdbuf );
+		if(cmdbuf->buffer[pos] == '\n')
+			break;
+	}
+	cmdbuf->lastSeen = cmdbuf->nextWrite;
+	
+	
+	
+	// Befehle enden mit \r\n	NICHT \r\r\n
+	if( (cmdbuf->buffer[pos-2] !='\r') && (cmdbuf->buffer[pos-1] =='\r') && (cmdbuf->buffer[pos] =='\n') )
+	{				
+		// Nachricht in die auswertung geben
+		// nur wenn vollständig den Buffer löschen		
+		if( ProcESP_Receive( espStruct, cmdbuf->buffer, pos ) != ProcResult_WaitForMore )
+		{			
+			ProcSerial_InitCmdBuf( cmdbuf );
+		}
 	}
 	return STATUS_OK;
 };

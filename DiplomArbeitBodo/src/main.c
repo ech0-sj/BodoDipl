@@ -33,6 +33,7 @@
 #include "conf_uart_serial.h"
 #include "conf_board.h"
 #include "conf_clock.h"
+#include "conf_defaults.h"
 
 #include "LED.h"
 #include "Systimer/Systimer.h"
@@ -46,6 +47,7 @@
 #include "Schedule/Scheduler.h"
 #include "Proc_Serial/Proc_Serial.h"
 #include "Proc_Wiznet/Proc_Wiznet.h"
+#include "Proc_ESP/Proc_ESP.h"
 
 #include "Http/HttpSimple.h"
 #include "Http/HtmlPages.h"
@@ -60,6 +62,7 @@ int main (void)
 	
 	ProcessStruct procSerial; 
 	ProcessStruct procWiznet;
+	ProcessStruct procEsp;
 	
 	netmode_type netMode; 
 	uint32_t netModeAsint;
@@ -104,6 +107,10 @@ int main (void)
 	ProcSerial_Init( &procSerial );
 	Scheduler_Register( &procSerial, ProcSerial ); 
 	
+	// den ESP Prozess initislisieren
+	ProcESP_Init( &procEsp );
+	Scheduler_Register( &procEsp, ProcESP ); 
+	
 	
 	// TODO weitere Prozesse hier erstellen 
 	
@@ -129,9 +136,9 @@ int main (void)
 	
 	
 	// init fertig -> welcome zeigen 
-	printf( "Bodo Janssen ... arduino due...\n" );
-	printf( "Welcome \n");
-	printf( "init done, start application \n" );
+	DebugOut( "Bodo Janssen ... arduino due...\n" );
+	DebugOut( "Welcome \n");
+	DebugOut( "init done, start application \n" );
 	
 	// Applikation starten 	
 	Scheduler_Schedule();	

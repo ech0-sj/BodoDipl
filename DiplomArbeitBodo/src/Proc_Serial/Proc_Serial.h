@@ -22,6 +22,7 @@ typedef struct
 	uint64_t lastRecv; 
 	uint8_t buffer[CMD_BUF_MAX_LEN];
 	uint32_t nextWrite;
+	uint32_t lastSeen;					/* letztes behandeltes Zeichen */ 
 	
 }SerialCmdBuffer;
 

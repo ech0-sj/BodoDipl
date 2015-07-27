@@ -7,6 +7,7 @@
 
 
 #include "Ethernet.h"
+#include "ESP8266/ESP8266.h"
 
 uint16_t Socket_GetRxCount(SOCKET sn)
 {
@@ -15,7 +16,12 @@ uint16_t Socket_GetRxCount(SOCKET sn)
 
 int32_t TCP_send(SOCKET sn, uint8_t * buf, uint16_t len)
 {
-	return send( sn, buf, len );
+	if( sn < 8 )
+		return send( sn, buf, len );
+	
+	return ESP_SendCompleteMessage( sn-8, buf, len ); 	
+	// return ESP_BeginSendMessage( sn-8, buf, len ); 
+	// return 0; 
 }
 
 int32_t TCP_recv(SOCKET sn, uint8_t * buf, uint16_t len)

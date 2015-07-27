@@ -9,6 +9,7 @@
 #include "Wiznet/Wiznet_Init.h"
 #include "../Tools/Tools.h"
 #include "../Persistent/PersistentItems.h"
+#include "Proc_ESP/Proc_ESP.h"
 
 void HandleOwnSerialProtocol( uint8_t* buffer, uint32_t len );
 
@@ -78,6 +79,22 @@ void HandleOwnSerialProtocol( uint8_t* buffer, uint32_t len )
 		wiz_NetInfo* netinfo = GetWiznetInfo();
 		
 		printf( "get lan IP: %i.%i.%i.%i \n", netinfo->ip[0], netinfo->ip[1], netinfo->ip[2], netinfo->ip[3] );
+		return;
+	}
+	else if( strstr(buffer, "re esp") )
+	{
+		ProcEsp_UpdateState( ESPState_start );
+		printf( "re esp OK \n");		
+	}
+	else if( strstr(buffer, "req esp ") )
+	{
+		// diesen Befehl einfach an den ESP weiter leiten 
+		buffer[len] = '\n'; 
+		len += 1;
+		
+		printf( "->echo [%s]", &buffer[8]);
+		USARTWifi_Write( &buffer[8], len-8); 
+				
 		return;
 	}
 	
